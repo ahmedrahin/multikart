@@ -1,0 +1,152 @@
+@extends('backend.layout.template')
+
+@section('page-title')
+    <title>Product Review List || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->site_title : 'Shop' }}</title>
+@endsection
+
+@section('page-css')
+    <link rel="stylesheet" href="{{ asset('backend/css/custom.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('backend/css/table.css') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('backend/css/datatables.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('backend/css/datatables.css') }}" rel="stylesheet" />
+@endsection
+
+@section('body-content')
+    <div class="page-content full"> 
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">
+                {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->site_title : 'Shop' }}
+            </div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{{ route('adminDashboard') }}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Reviews List</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row">
+            <div class="col-12 d-flex">
+                <div class="card radius-10 w-100">
+                    <div class="card-body">
+                        <!-- Message -->
+                        @include( 'backend.includes.message' )
+                        <div class="d-flex align-items-center mb-3">
+                        <h5 class="heading">Product Review List</h5>
+                        </div>
+
+                        <div class=" mb-3 border p-3 radius-10">
+                            @if( $reviewList->count() != 0 )
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="panel">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        <a href="{{ route('manage-product') }}" class="btn btn-sm btn-primary pull-left"  style="margin-right:10px;"> All Product <i class="bx bx-right-arrow-alt"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body table-responsive">
+                                            <table id="data_table" class="table table-striped data-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sl.</th>
+                                                        <th>Product Title</th>
+                                                        <th>Cusotmer Email</th>
+                                                        <th>Message</th>
+                                                        <th>Rating</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                   
+                                                </tbody>      
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="panel mb-4">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <a href="{{ route('create-product') }}" class="btn btn-sm btn-primary pull-left"  style="margin-right:10px;"><i class="fa fa-plus-circle"></i> Add New</a>
+                                            <a href="{{ route('trash-manage-product') }}" class="btn btn-sm btn-primary pull-left"><i class="bi bi-trash-fill"></i>View Trash</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-danger mt-8">
+                                Opps!! No Data Found.
+                            </div>
+                        @endif
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('backend/js/datatable.min.js') }}" defer></script>
+    <script src="{{ asset('backend/js/datatables.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {   
+            $(function () {
+                var table = $('#data_table').DataTable({
+                    processing: false,
+                    serverSide: true,
+                    ajax: "{{ route('review-manage') }}",
+                    language: {
+                        paginate: {
+                            previous: '<i class="bi bi-chevron-double-left"></i>', 
+                            next: '<i class="bi bi-chevron-double-right"></i>'
+                        }   
+                    },
+                    columns: [
+                        {data: 'sl', name: 'sl'},
+                        {data: 'product_title', name: 'product_title'},
+                        {data: 'email', name: 'email'},
+                        {data: 'message', name: 'message', orderable: false, searchable: false},
+                        // Render star icons for rating column
+                        { 
+                            data: 'rating',
+                            name: 'rating',
+                            orderable: false,
+                            searchable: false,
+                            render: function(data, type, full, meta) {
+                                var rating = parseFloat(data);
+                                var stars = '';
+                                for (var i = 1; i <= 5; i++) {
+                                    if (i <= rating) {
+                                        stars += '<i class="fa fa-star"></i>';
+                                    } else if (i - rating === 0.5) {
+                                        stars += '<i class="fa fa-star-half-o"></i>';
+                                    } else {
+                                        stars += '<i class="fa fa-star-o"></i>';
+                                    }
+                                }
+                                return stars;
+                            }
+                        },
+                        {data: 'action', name: 'action', orderable: false, searchable: false},
+                    ]
+                });
+            });
+        });
+
+    </script>
+@endsection

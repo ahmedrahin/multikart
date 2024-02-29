@@ -1,0 +1,39 @@
+table {
+    margin: 0 !important;
+}
+td,th {
+    vertical-align: middle;
+}
+table p {
+    margin: 0;
+    font-weight: 400;
+    text-align: left;
+}
+th,td {
+    text-align: center;
+}
+thead {
+    background-color: #8D8D8D !important;
+    color: white !important;
+    font-size: 16px;
+    border: none !important;
+}
+table, thead, tr, td, th {
+    border-color: #e7e7e7 !important;
+    border: none !important;
+    border-bottom: 1px solid;
+}
+table {
+    margin: 20px 0 !important;
+    border-collapse: inherit;
+    border-spacing: 3px;
+    background-color: white;
+}
+tr {
+    border: 1px solid #00000033;
+}
+
+th,td {
+    padding: 13px 20px !important;
+    font-weight: 500;
+}

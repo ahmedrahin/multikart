@@ -318,8 +318,6 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
 
     // wishlist
     Route::get('/wishlist-list', [WishlistController::class, 'wishlistList'])->name('wishlistList');
-    
-    
 });
 
 /*

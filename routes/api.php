@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Category;
 use App\Http\Controllers\Frontend\ProductpagesController;
 
 /*
@@ -53,6 +52,7 @@ Route::get('get-cart/{id}', function($id){
 Route::get('get-method/{id}', function($id){
     return json_encode(App\Models\Shipping::where('base_id', $id)->first());
 });
+
 Route::get('get-qriour', function(){
     return json_encode(App\Models\Shipping::where('base_id', null)->get());
 });

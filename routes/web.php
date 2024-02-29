@@ -110,7 +110,7 @@ Route::group(['prefix' => 'message'], function(){
     Route::delete('/delete/{id}', [MessageController::class, 'destroy'])->name('del-message')->middleware('isAdmin');
 });
 
-// customer review
+// customer reviews
 Route::group(['prefix' => 'customer-review'], function(){
     Route::post('/store', [ReviewController::class, 'store'])->name('review-store');
 });

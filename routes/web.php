@@ -39,6 +39,7 @@ use App\Http\Controllers\Payment\SslCommerzPaymentController;
 | Frontend Routes
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', [PagesController::class, 'home'])->name('homepage');
 Route::get('/about', [PagesController::class, 'about'])->name('aboutpage');
 Route::get('/contact', [PagesController::class, 'contact'])->name('contactpage');
@@ -54,7 +55,7 @@ Route::get('/category-product/{slug}', [ProductpagesController::class, 'category
 Route::get('/search', [ProductpagesController::class, 'search_product'])->name('search-product');
 
 // Cart Page
-Route::group(['prefix' => 'carts'], function(){
+Route::group(['prefix' => 'carts'], function () {
     Route::get('/', [CartController::class, 'manage'])->name('cart-manage')->middleware('checkoutCartPage');
     Route::post('/store', [CartController::class, 'store'])->name('cart-store');
     Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');
@@ -67,8 +68,8 @@ Route::group(['prefix' => 'carts'], function(){
 });
 
 //wishlist
-Route::controller(WishlistController::class)->group(function(){
-    Route::group([ 'prefix' => 'wishlists' ], function(){
+Route::controller(WishlistController::class)->group(function () {
+    Route::group(['prefix' => 'wishlists'], function () {
         Route::get('/', 'manage')->name('manage-wishlist')->middleware('WishlistItem');
         Route::post('/store', 'store')->name('store-wishlist');
         Route::post('/update/{id}', 'update')->name('update-wishlist');
@@ -77,7 +78,7 @@ Route::controller(WishlistController::class)->group(function(){
 });
 
 // Checkout Page
-Route::middleware('checkoutCartPage')->group(function(){
+Route::middleware('checkoutCartPage')->group(function () {
     Route::get('/checkout', [SslCommerzPaymentController::class, 'checkout'])->name('checkout');
     Route::post('/success-order', [SslCommerzPaymentController::class, 'index'])->name('make-payment');
     Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
@@ -102,7 +103,7 @@ Route::delete('/delete-account/{id}', [DashboardController::class, 'profileDestr
 Route::patch('/deactive-account/{id}', [DashboardController::class, 'deactiveAccount'])->name('deactive-account');
 
 // user message
-Route::group(['prefix' => 'message'], function(){
+Route::group(['prefix' => 'message'], function () {
     Route::get('/manage', [MessageController::class, 'manage'])->name('manage-message')->middleware('isAdmin');
     Route::post('/store', [MessageController::class, 'store'])->name('store-message');
     Route::get('/show/{id}', [MessageController::class, 'show'])->name('show-message')->middleware('isAdmin');
@@ -111,7 +112,7 @@ Route::group(['prefix' => 'message'], function(){
 });
 
 // customer reviews
-Route::group(['prefix' => 'customer-review'], function(){
+Route::group(['prefix' => 'customer-review'], function () {
     Route::post('/store', [ReviewController::class, 'store'])->name('review-store');
 });
 
@@ -125,19 +126,19 @@ Route::fallback(function () {
 | Backend Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
+Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function () {
 
     // All Admin
-    Route::controller(AdminController::class)->group(function(){
+    Route::controller(AdminController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('adminDashboard');
-        Route::group(['prefix' => 'users'],function(){
+        Route::group(['prefix' => 'users'], function () {
             Route::get('/admin-manage', 'manage_admin')->name('manage-admin')->middleware('isSubAdmin');
         });
     });
 
     // All User
-    Route::controller(UserController::class)->group(function(){
-        Route::group(['prefix' => 'users'],function(){
+    Route::controller(UserController::class)->group(function () {
+        Route::group(['prefix' => 'users'], function () {
             Route::get('/user-manage', 'manage_user')->name('manage-user');
             Route::post('/trash/{id}', 'trash')->name('trash-user');
             Route::get('/edit/{id}', 'edit')->name('edit-user');
@@ -153,8 +154,8 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // Brand
-    Route::controller(BrandController::class)->group(function(){
-        Route::group(['prefix' => 'brand'], function(){
+    Route::controller(BrandController::class)->group(function () {
+        Route::group(['prefix' => 'brand'], function () {
             Route::get('/manage', 'manage')->name('manage-brand');
             Route::get('/create', 'create')->name('create-brand');
             Route::post('/store', 'store')->name('store-brand');
@@ -169,7 +170,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // Parent Category
-    Route::group(['prefix' => 'category'], function(){
+    Route::group(['prefix' => 'category'], function () {
         Route::get('/manage', [CategoryController::class, 'manage'])->name('manage-category');
         Route::get('/create', [CategoryController::class, 'create'])->name('create-category');
         Route::post('/store', [CategoryController::class, 'store'])->name('store-category');
@@ -183,7 +184,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // Sub Category
-    Route::group(['prefix' => 'sub-category'], function(){
+    Route::group(['prefix' => 'sub-category'], function () {
         Route::get('/manage', [SubCategoryController::class, 'manage'])->name('manage-subCategory');
         Route::get('/create', [SubCategoryController::class, 'create'])->name('create-subCategory');
         Route::post('/store', [SubCategoryController::class, 'store'])->name('store-subCategory');
@@ -197,7 +198,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // Product
-    Route::group(['prefix' => 'product'], function(){
+    Route::group(['prefix' => 'product'], function () {
         Route::get('/manage', [ProductController::class, 'manage'])->name('manage-product');
         Route::get('/create', [ProductController::class, 'create'])->name('create-product');
         Route::post('/store', [ProductController::class, 'store'])->name('store-product');
@@ -211,12 +212,11 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
         Route::get('/product-detail/{id}', [ProductController::class, 'product_detail'])->name('product-detail');
         Route::get('/product-review', [ProductController::class, 'Reviewmanage'])->name('review-manage');
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy-review');
-        Route::post('/update-feature-status/{id}', [ProductController::class , 'update_feature'])->name('update-feature-status');
-
+        Route::post('/update-feature-status/{id}', [ProductController::class, 'update_feature'])->name('update-feature-status');
     });
 
     // Product variation
-    Route::group(['prefix' => 'product-variation'], function(){
+    Route::group(['prefix' => 'product-variation'], function () {
         Route::get('/', [ProductVariationController::class, 'variation'])->name('variation-product');
         Route::post('/store', [ProductVariationController::class, 'store'])->name('store-variation-product');
         Route::post('/update/{id}', [ProductVariationController::class, 'update'])->name('update-variation-product');
@@ -229,8 +229,8 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // order
-    Route::controller(OrderController::class)->group(function(){
-        Route::group(['prefix' => 'order'], function(){
+    Route::controller(OrderController::class)->group(function () {
+        Route::group(['prefix' => 'order'], function () {
             Route::get('manage-order', 'manage')->name('manage-order');
             Route::get('order-details/{id}', 'order_details')->name('order-details');
             Route::patch('order-update/{id}', 'update')->name('order-update');
@@ -239,7 +239,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // Country
-    Route::group(['prefix' => 'country'], function(){
+    Route::group(['prefix' => 'country'], function () {
         Route::get('/manage', [CountryController::class, 'manage'])->name('manage-country');
         Route::get('/create', [CountryController::class, 'create'])->name('create-country');
         Route::post('/store', [CountryController::class, 'store'])->name('store-country');
@@ -252,7 +252,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // State
-    Route::group(['prefix' => 'state'], function(){
+    Route::group(['prefix' => 'state'], function () {
         Route::get('/manage', [StateController::class, 'manage'])->name('manage-state');
         Route::get('/create', [StateController::class, 'create'])->name('create-state');
         Route::post('/store', [StateController::class, 'store'])->name('store-state');
@@ -265,7 +265,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // District
-    Route::group(['prefix' => 'district'], function(){
+    Route::group(['prefix' => 'district'], function () {
         Route::get('/manage', [DistrictController::class, 'manage'])->name('manage-district');
         Route::get('/create', [DistrictController::class, 'create'])->name('create-district');
         Route::post('/store', [DistrictController::class, 'store'])->name('store-district');
@@ -278,7 +278,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // shipping method
-    Route::group(['prefix' => 'shipping-methods'], function(){
+    Route::group(['prefix' => 'shipping-methods'], function () {
         Route::get('/manage', [ShippingController::class, 'manage'])->name('shipping-manage');
         Route::post('/store', [ShippingController::class, 'store'])->name('shipping-store');
         Route::post('curiour/store', [ShippingController::class, 'curiourStore'])->name('curiour-store');
@@ -288,7 +288,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // currency 
-    Route::group(['prefix' => 'currency'], function(){
+    Route::group(['prefix' => 'currency'], function () {
         Route::get('/manage', [CurrencyController::class, 'manage'])->name('manage-currency');
         Route::match(['get', 'post'], '/add_edit/{id?}', [CurrencyController::class, 'add_edit'])->name('currency-add.edit');
         Route::post('/update/{id}', [CurrencyController::class, 'update'])->name('currency-update');
@@ -296,18 +296,18 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
     });
 
     // genarel settings 
-    Route::group(['prefix' => 'genarel_settings'], function(){
+    Route::group(['prefix' => 'genarel_settings'], function () {
         Route::get('/manage', [GenarelSettings::class, 'manage'])->name('manage-genarelSettings');
         Route::post('/update/{id?}', [GenarelSettings::class, 'update'])->name('genarelSettings-update');
     });
 
     // customer
-    Route::group(['prefix' => 'customer'], function(){
+    Route::group(['prefix' => 'customer'], function () {
         Route::get('/manage', [CustomerController::class, 'manage'])->name('manage-customer');
     });
 
     // cupon
-    Route::group(['prefix' => 'coupons'], function(){
+    Route::group(['prefix' => 'coupons'], function () {
         Route::get('/manage', [CuponController::class, 'manage'])->name('manage-cupons');
         Route::post('/store', [CuponController::class, 'store'])->name('store-cupons');
         Route::get('/create', [CuponController::class, 'create'])->name('create-cupons');
@@ -325,4 +325,4 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function(){
 | Web API
 |--------------------------------------------------------------------------
 */
-require __DIR__.'/api.php';
+require __DIR__ . '/api.php';

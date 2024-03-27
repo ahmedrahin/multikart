@@ -107,6 +107,11 @@ class Cart extends Model
         ]);
     
         return ['totalAmount' => $discountedTotalAmount, 'discount' => $discount];
-    }    
+    } 
+    
+    public function OrderVariation()
+    {
+        return $this->hasMany(OrderVariation::class);
+    }
 
 }

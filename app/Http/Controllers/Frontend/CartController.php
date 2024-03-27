@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Cupon;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\OrderVariation;
 use Illuminate\Http\Request;
 use Illuminate\support\Str;
 use Illuminate\Support\Facades\Session;
@@ -25,16 +26,24 @@ class CartController extends Controller
     }
 
     public function store(Request $request){
+        $form = [];
+        parse_str($request->input('newform'), $form);
+
+        // Extract specific data
+        $productId = $form['productId'] ?? null;
+        $quantity = $form['quantity'] ?? null;
+        $variationIds = $request->input('variation_id');
+
         // check user has been log in or not
         if( Auth::check() ){
-            $cart = Cart::where('user_id', Auth::id())->where('product_id', $request->productId)->where('order_id', NULL)->first();
+            $cart = Cart::where('user_id', Auth::id())->where('product_id', $productId)->where('order_id', NULL)->first();
         } else{
-            $cart = Cart::where('ip_address', request()->ip())->where('product_id', $request->productId)->where('order_id', NULL)->first();
+            $cart = Cart::where('ip_address', request()->ip())->where('product_id', $productId)->where('order_id', NULL)->first();
         }
 
         // if the product alerady has been cart increment the product quantity
         if( !is_null( $cart ) ){
-            $newQuantity = $cart->product_quantity + $request->quantity;
+            $newQuantity = $cart->product_quantity + $quantity;
             $cart->update(['product_quantity' => $newQuantity]);
 
             // product quantity has been increase
@@ -49,13 +58,27 @@ class CartController extends Controller
             }
             
             $cart->ip_address        = request()->ip();
-            $cart->product_id        = $request->productId;
-            $cart->product_quantity  = $request->quantity;
+            $cart->product_id        = $productId;
+            $cart->product_quantity  = $quantity;
 
             // product save into the cart
             session()->flash('alert-type', 'success');
             session()->flash('message', 'The Item Added Into Cart');
             $cart->save();
+
+            // order variation
+            if(!empty($variationIds))
+            {
+                foreach($variationIds as $variation)
+                {
+                    $OrderVariation = new OrderVariation;
+                    $OrderVariation->cart_id = $cart->id;
+                    $OrderVariation->product_id = $productId;
+                    $OrderVariation->var_val_id = $variation;
+                    $OrderVariation->save();
+                }
+            }
+            
             return redirect()->route('checkout');
         }
     }
@@ -214,3 +237,44 @@ class CartController extends Controller
     }
     
 }
+
+
+
+
+
+
+
+
+// // check user has been log in or not
+// if( Auth::check() ){
+//     $cart = Cart::where('user_id', Auth::id())->where('product_id', $request->productId)->where('order_id', NULL)->first();
+// } else{
+//     $cart = Cart::where('ip_address', request()->ip())->where('product_id', $request->productId)->where('order_id', NULL)->first();
+// }
+
+// // if the product alerady has been cart increment the product quantity
+// if( !is_null( $cart ) ){
+//     $newQuantity = $cart->product_quantity + $request->quantity;
+//     $cart->update(['product_quantity' => $newQuantity]);
+
+//     // product quantity has been increase
+//     session()->flash('alert-type', 'success');
+//     session()->flash('message', 'Item Quantity Updated Into Cart');
+//     $cart->save();
+//     return redirect()->back();
+// }else {
+//     $cart = new Cart();
+//     if( Auth::check() ){
+//         $cart->user_id = Auth::id();
+//     }
+    
+//     $cart->ip_address        = request()->ip();
+//     $cart->product_id        = $request->productId;
+//     $cart->product_quantity  = $request->quantity;
+
+//     // product save into the cart
+//     session()->flash('alert-type', 'success');
+//     session()->flash('message', 'The Item Added Into Cart');
+//     $cart->save();
+//     return redirect()->route('checkout');
+// }

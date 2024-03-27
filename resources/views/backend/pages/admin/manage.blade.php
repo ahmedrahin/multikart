@@ -59,10 +59,10 @@
                                                         <tr>
                                                             <th>Sl.</th>
                                                             <th>Image</th>
-                                                            <th>User Name</th>
+                                                            <th>Admin Name</th>
                                                             <th>Email Address</th>
                                                             <th>Phone</th>
-                                                            <th>User Role</th>
+                                                            <th>Admin Role</th>
                                                             <th>Status</th>
                                                             <th>Action</th>
                                                         </tr>

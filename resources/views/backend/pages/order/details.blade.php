@@ -119,7 +119,11 @@
                                                             @foreach( $items as $item )
                                                                 <tr>
                                                                     <td>{{++$sl}}</td>
-                                                                    <td>{{ $item->product->title }}</td>
+                                                                    <td>
+                                                                        <a href="{{route('product-detail', $item->product->id)}}" style="color:#172b4d;" target="_blank">
+                                                                            {{ $item->product->title }}
+                                                                        </a>
+                                                                    </td>
                                                                     <td>৳{{ $item->prdtc_unt_pri }}</td>
                                                                     <td>{{ $item->product_quantity }}</td>
                                                                     <td>৳{{ $item->prdtc_unt_pri * $item->product_quantity }}</td>

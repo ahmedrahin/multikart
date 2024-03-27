@@ -62,6 +62,7 @@
                             @endif
                             
                         </div>
+                        {{-- thumbnail & gallery image --}}
                         <div class="row">
                             <div class="col-12 p-0">
                                 <div class="slider-nav">
@@ -81,8 +82,10 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-lg-6 rtl-text">
                         <div class="product-right">
+                            {{-- top details --}}
                             <div class="product-count">
                                 <ul>
                                     <li>
@@ -224,6 +227,7 @@
                                 @endif
                             </div>
                             
+                            {{-- product category --}}
                             <div class="label-section">
                                 <span class="category">Category:</span>
                                 <span class="label-text" style="color: #ff4c3b;font-weight: 500;text-transform:capitalize;">
@@ -253,6 +257,8 @@
                                    
                                 </span>
                             </div>
+
+                            {{-- product price --}}
                             @if( !is_null( $product_detail->offer_price ) )
                                 @php
                                     $regularPrice       = $product_detail->regular_price;
@@ -266,7 +272,10 @@
                             @else
                                 <h3 class="price-detail">৳{{ $product_detail->regular_price }}</h3>
                             @endif
-                            <form action="{{ route('cart-store') }}" method="POST" name="cartForm">
+
+                            <form id="AddCartForm" name="cartForm">
+
+                                {{-- product variation --}}
                                 @php
                                     $attrs = $product_detail->ProductAttribute;
                                 @endphp
@@ -284,45 +293,51 @@
                                         @if ($attr->ProductVariation->var_name == "Color" || $attr->ProductVariation->var_name == "color")
                                             <div class="border-product">
                                                 <h6 class="product-title size-text mb-2"><span>select {{ $attr->ProductVariation->var_name }} <span></h6>
-                                                <ul class="color-variant">
+                                                <ul class="color-variant variationItem">
                                                     @foreach ($variationValues as $valueId)
                                                         @php
                                                             $variationValue = App\Models\VariationValue::find($valueId);
                                                         @endphp
                                                         @if( $variationValue->option_value != null )
                                                             <li class="bg-light hasColor" style="background-color:{{$variationValue->option_value}} !important">
-                                                                <input type="radio" name="p_attr" id="" value="{{$variationValue->option}}">
+                                                                <input type="radio" name="p_attr" id="{{$variationValue->id}}" class="VariationId" value="{{$variationValue->option}}">
                                                             </li>
                                                         @else
                                                             <li class="no-color">
                                                                 <div>
-                                                                    <input type="radio" name="p_attr" id="attr" value="{{$variationValue->option}}">
+                                                                    <input type="radio" name="p_attr" id="{{$variationValue->id}}" class="VariationId" value="{{$variationValue->option}}">
                                                                     <label for="attr{{$variationValue->id}}" class="attrColor">{{$variationValue->option}}</label>
                                                                 </div>
                                                             </li>
                                                         @endif
                                                     @endforeach
+                                                    <div class="clear">
+                                                        &times; Clear
+                                                    </div>
                                                 </ul>
                                             </div>
-                                            @else
-                                                <div id="selectSize" class="addeffect-section product-description border-product">
-                                                    <h6 class="product-title size-text">select {{ $attr->ProductVariation->var_name }}</h6>
-                                                    <h6 class="error-message">please select {{ $attr->ProductVariation->var_name }}</h6>
-                                                    <div class="size-box">
-                                                        <ul class="selected s{{$attr->id}}">
-                                                            @foreach ($variationValues as $valueId)
-                                                                @php
-                                                                    $variationValue = App\Models\VariationValue::find($valueId);
-                                                                @endphp
-                                                                <li>
-                                                                    <a href="javascript:void(0)">{{$variationValue->option}}</a>
-                                                                    <input type="radio" name="size" id="" value="{{$variationValue->option}}">
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>  
-                                                </div>
-                                            @endif
+                                        @else
+                                            <div id="selectSize" class="addeffect-section product-description border-product">
+                                                <h6 class="product-title size-text">select {{ $attr->ProductVariation->var_name }}</h6>
+                                                <h6 class="error-message">please select {{ $attr->ProductVariation->var_name }}</h6>
+                                                <div class="size-box">
+                                                    <ul class="selected variationItem">
+                                                        @foreach ($variationValues as $valueId)
+                                                            @php
+                                                                $variationValue = App\Models\VariationValue::find($valueId);
+                                                            @endphp
+                                                            <li>
+                                                                <a href="javascript:void(0)">{{$variationValue->option}}</a>
+                                                                <input type="radio" name="size" id="{{$variationValue->id}}" class="VariationId" value="{{$variationValue->option}}">
+                                                            </li>
+                                                        @endforeach
+                                                        <div class="clear">
+                                                            &times; Clear
+                                                        </div>
+                                                    </ul>
+                                                </div>  
+                                            </div>
+                                        @endif
                                     @endforeach
                                 @else
                                     <span class="" style="visibility: hidden">No variation</span>
@@ -354,7 +369,7 @@
                                             <h4 class="stock text-danger">Out of Stock!</h4>
                                         @endif  
                                         
-                                        <button id="cartEffect" class="btn btn-solid hover-solid btn-animation" type="submit">
+                                        <button id="cartEffect" class="btn btn-solid hover-solid btn-animation " type="submit">
                                             <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
                                             Buy Now
                                         </button>
@@ -1012,12 +1027,33 @@
     {{-- variation --}}
     <script>
         @if( $attrs->count() > 0 )
-            $(".color-variant li").click(function() {
-                $(this).find('input[type="radio"]').prop('checked', true).trigger('click');
-            })
-            $(".s{{$attr->id}} li").click(function() {
-                $(this).find('input[type="radio"]').prop('checked', true).trigger('click');
-            })
+           // Click event handler for color variant list items
+        $(".color-variant li").click(function() {
+            $(this).find('input[type="radio"]').prop('checked', true).trigger('change');
+            $(this).closest('.variationItem').find('.clear').css('visibility', 'visible');
+        });
+
+        // Click event handler for selected list items
+        $(".selected li").click(function() {
+            $(this).find('input[type="radio"]').prop('checked', true).trigger('change');
+            $(this).closest('.variationItem').find('.clear').css('visibility', 'visible');
+        });
+
+        $(".clear").hide();
+        $(".variationItem").each(function() {
+            $(this).find('input[type="radio"]').change(function() {
+                $(this).closest('.variationItem').find('.clear').toggle(Boolean($(this).prop('checked')));
+            });
+        });
+
+        $(".clear").click(function() {
+            var radioButton = $(this).closest('.variationItem').find('input[type="radio"]');
+            radioButton.prop('checked', false);
+            radioButton.closest('li').removeClass('active');
+            // Hide the clear div
+            $(this).css('visibility', 'hidden');
+        });
+
         @endif
     </script>
     
@@ -1077,6 +1113,30 @@
                 toastr.error('Exceeds available quantity', '', {"positionClass": "toast-top-right", "closeButton": true});
                 toastr.info(`Available Product is ${availbleItem.innerText} Pcs`, '', {"positionClass": "toast-top-right", "closeButton": true});
 
+            }else{
+                event.preventDefault();
+
+                var newform = $(cartForm).serialize();
+                var variation_id = [];
+                $('input.VariationId:checked').each(function(){
+                    variation_id.push($(this).attr('id'));
+                });
+
+                $.ajax({
+                    type : 'POST',
+                    url : '{{ route("cart-store") }}',
+                    data : {
+                        newform : newform,
+                        variation_id : variation_id
+                    },
+                    success:function(response)
+                    {
+                        console.log(response)
+                    }
+
+                })
+                
+       
             }
         });
 

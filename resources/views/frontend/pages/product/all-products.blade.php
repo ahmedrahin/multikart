@@ -59,6 +59,7 @@
                                             heart’s content on Multikart. </p>
                                     </div>
                                 </div>
+
                                 <div class="collection-product-wrapper">
                                     <div class="product-top-filter">
                                         <div class="row">
@@ -188,6 +189,7 @@
                                                             </div>
                                                             <div class="product-detail">
                                                                 <div class="price_name">
+                                                                    {{-- product review --}}
                                                                     @php
                                                                         $product_reviewDetails = App\Models\Product::with('review')->find($product->id);
                                                                         if ($product_reviewDetails) {
@@ -295,12 +297,30 @@
                                                                     <a href="{{ route('product-details', $product->slug) }}">
                                                                         <h6>{{ $product->title }}</h6>
                                                                     </a>
-                                                                    
-                                                                    @if( !is_null( $product->offer_price ) )
-                                                                        <h4>৳{{ $product->offer_price }} <span class="old-price"><del>৳{{$product->regular_price}}</del></span> </h4>
+
+                                                                    @if($product->ProductAttribute->count() > 0)
+                                                                        @php
+                                                                            $getPrice = App\Models\ProductAttribute::getPrice($product->id);
+                                                                            $allPrice = [$getPrice['minPrice'], $getPrice['maxPrice']];
+                                                                            $variationPrice = "";
+
+                                                                            if ($getPrice['minPrice'] == $getPrice['maxPrice']) {
+                                                                                // If minimum and maximum prices are the same, just display one price
+                                                                                $variationPrice = "৳" . $getPrice['minPrice'];
+                                                                            } else {
+                                                                                // If prices are different, display the price range
+                                                                                $variationPrice = "৳" . min($allPrice) . " - ৳" . max($allPrice);
+                                                                            }
+                                                                        @endphp
+                                                                        <h4>{{ $variationPrice }}</h4>
                                                                     @else
-                                                                        <h4>৳{{ $product->regular_price }}</h4>    
+                                                                        @if(!is_null($product->offer_price))
+                                                                            <h4>৳{{ $product->offer_price }} <span class="old-price"><del>৳{{$product->regular_price}}</del></span> </h4>
+                                                                        @else
+                                                                            <h4>৳{{ $product->regular_price }}</h4>    
+                                                                        @endif
                                                                     @endif
+
                                                                 </div>
                                                                     <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm">
                                                                         @csrf

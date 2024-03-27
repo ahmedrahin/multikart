@@ -27,6 +27,14 @@
 
 {{-- search box --}}
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
 <script>
     
     $(window).on('click', function() {
@@ -278,5 +286,12 @@
     //     }  
       
     // })
+</script>
+
+
+{{-- Add art Ajax --}}
+
+<script>
+
 </script>
 @yield('page-script')

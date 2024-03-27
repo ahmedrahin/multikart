@@ -1118,3 +1118,14 @@ select {
     font-size: 16px;
     font-weight: 500;
 }
+.variationItem {
+    position: relative;
+}
+.variationItem .clear {
+    position: absolute;
+    top: -25px;
+    left: 18%;
+    color: #ff0000c9;
+    cursor: pointer;
+    visibility: hidden;
+}

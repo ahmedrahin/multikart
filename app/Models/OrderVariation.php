@@ -25,4 +25,6 @@ class OrderVariation extends Model
     {
         return $this->belongsTo(VariationValue::class,'var_val_id');
     }
+
+
 }

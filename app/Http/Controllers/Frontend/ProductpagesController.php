@@ -181,8 +181,9 @@ class ProductpagesController extends Controller
         }   
 
         $varitaions    = ProductVariation::orderBy('var_name', 'asc')->get();
-        $options       = VariationValue::orderBy('option', 'asc')->get();     
-        return view('frontend.pages.product.product-details', compact('product_detail', 'wishlist_detail', 'varitaions', 'options'));
+        $options       = VariationValue::orderBy('option', 'asc')->get();  
+        $reviews       = Review::where('product_id', $product_detail->id)->get();   
+        return view('frontend.pages.product.product-details', compact('product_detail', 'wishlist_detail', 'varitaions', 'options', 'reviews'));
     }
 
     // search box 

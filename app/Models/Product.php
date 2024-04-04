@@ -56,9 +56,9 @@ class Product extends Model
         return $this->hasMany(Wishlist::class, 'product_id');
     }
 
-    // public function ProductVariation(){
-    //     return $this->belongsTo(ProductVariation::class, 'variation_id');
-    // }
+    public function OrderVariation(){
+        return $this->hasMany(OrderVariation::class, "product_id");
+    }
 
     public function ProductAttribute(){
         return $this->hasMany(ProductAttribute::class, 'products_id');

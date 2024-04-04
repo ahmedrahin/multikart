@@ -123,67 +123,68 @@
 
                                     {{-- all prodcuts --}}
                                     <div class="product-wrapper-grid allProduct">
-                                        <div class="row margin-res">
+                                        <div class="row margin-res product-list">
                                             @if( $products->count() != 0 )
-                                                @foreach( $products as $product )
+                                                @foreach($products as $product)
                                                     <div class="col-xl-3 col-6 col-grid-box">
                                                         <div class="product-box">
                                                             <div class="img-wrapper">
-                                                                @if( !is_null($product->thumb_image) )
-                                                                    <div class="front">
-                                                                        <a href="{{ route('product-details', $product->slug) }}">
-                                                                            <img src="{{asset('uploads/product/thumb_image/' . $product->thumb_image )}}" class="img-fluid blur-up lazyload bg-img" alt="">
-                                                                        </a>
-                                                                    </div>
-                                                                    {{-- gallery image --}}
-                                                                    @php
-                                                                        $gallery = App\Models\ImageGallery::where('product_id', $product->id)->first();
-                                                                    @endphp
-                                                                    @if( !is_null($product->back_image) )
-                                                                        <div class="back">
-                                                                            <a href="{{ route('product-details', $product->slug) }}">
-                                                                                <img src="{{asset('uploads/product/back_image/' . $product->back_image )}}" class="img-fluid blur-up lazyload bg-img" alt="">
-                                                                            </a>
-                                                                        </div>
-                                                                    @elseif( isset( $gallery ) )
-                                                                        <div class="back">
-                                                                            <a href="{{ route('product-details', $product->slug) }}">
-                                                                                <img src="{{asset($gallery->name)}}" class="img-fluid blur-up lazyload bg-img" alt="">
-                                                                            </a>
-                                                                        </div>
-                                                                    @endif
+                                                                @if(!is_null($product->thumb_image))
+                                                                <div class="front">
+                                                                    <a href="{{ route('product-details', $product->slug) }}">
+                                                                        <img src="{{asset('uploads/product/thumb_image/' . $product->thumb_image)}}" class="img-fluid blur-up lazyload bg-img" alt="">
+                                                                    </a>
+                                                                </div>
+                                                                {{-- gallery image --}}
+                                                                @php
+                                                                $gallery = App\Models\ImageGallery::where('product_id', $product->id)->first();
+                                                                @endphp
+                                                                @if(!is_null($product->back_image))
+                                                                <div class="back">
+                                                                    <a href="{{ route('product-details', $product->slug) }}">
+                                                                        <img src="{{asset('uploads/product/back_image/' . $product->back_image)}}" class="img-fluid blur-up lazyload bg-img" alt="">
+                                                                    </a>
+                                                                </div>
+                                                                @elseif(isset($gallery))
+                                                                <div class="back">
+                                                                    <a href="{{ route('product-details', $product->slug) }}">
+                                                                        <img src="{{asset($gallery->name)}}" class="img-fluid blur-up lazyload bg-img" alt="">
+                                                                    </a>
+                                                                </div>
+                                                                @endif
                                                                 @else
-                                                                    <div class="front">
-                                                                        <a href="{{ route('product-details', $product->slug) }}">
-                                                                            <img src="{{asset('frontend/images/null.jpg')}}" class="img-fluid blur-up lazyload bg-img" alt="">
-                                                                        </a>
-                                                                    </div>
+                                                                <div class="front">
+                                                                    <a href="{{ route('product-details', $product->slug) }}">
+                                                                        <img src="{{asset('frontend/images/null.jpg')}}" class="img-fluid blur-up lazyload bg-img" alt="">
+                                                                    </a>
+                                                                </div>
                                                                 @endif
 
                                                                 <div class="cart-info cart-wrap">
                                                                     <button data-bs-toggle="modal" data-bs-target="#addtocart" title="Add to cart">
                                                                         <i class="ti-shopping-cart"></i>
-                                                                    </button> 
+                                                                    </button>
                                                                     <a href="javascript:void(0)" title="Add to Wishlist">
-                                                                        <i class="ti-heart" aria-hidden="true"></i></a> 
+                                                                        <i class="ti-heart" aria-hidden="true"></i>
+                                                                    </a>
                                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#quick-view" title="Quick View">
                                                                         <i class="ti-search" aria-hidden="true"></i>
-                                                                    </a> 
+                                                                    </a>
                                                                     <a href="compare.html" title="Compare">
                                                                         <i class="ti-reload" aria-hidden="true"></i>
                                                                     </a>
                                                                 </div>
 
                                                                 {{-- show discount --}}
-                                                                @if( !is_null( $product->offer_price ) )
-                                                                    @php
-                                                                        $regularPrice       = $product->regular_price;
-                                                                        $offerPrice         = $product->offer_price;
-                                                                        $discountPercentage = (($regularPrice - $offerPrice) / $regularPrice) * 100;
-                                                                    @endphp
-                                                                    <div class="discount">
-                                                                        -{{ round($discountPercentage) }}%
-                                                                    </div>
+                                                                @if(!is_null($product->offer_price))
+                                                                @php
+                                                                $regularPrice = $product->regular_price;
+                                                                $offerPrice = $product->offer_price;
+                                                                $discountPercentage = (($regularPrice - $offerPrice) / $regularPrice) * 100;
+                                                                @endphp
+                                                                <div class="discount">
+                                                                    -{{ round($discountPercentage) }}%
+                                                                </div>
                                                                 @endif
 
                                                             </div>
@@ -191,176 +192,183 @@
                                                                 <div class="price_name">
                                                                     {{-- product review --}}
                                                                     @php
-                                                                        $product_reviewDetails = App\Models\Product::with('review')->find($product->id);
-                                                                        if ($product_reviewDetails) {
-                                                                            $reviewsCount = $product_reviewDetails->review->count();
-                                                                            $reviews = $product_reviewDetails->review;
-                                                                            if ($reviews->count() > 0) {
-                                                                                $averageRating = $reviews->avg('rating');
-                                                                            } else {
-                                                                                $averageRating = 0; 
-                                                                            }
-                                                                        } else {
-                                                                            $averageRating = 0;
-                                                                        }
+                                                                    $product_reviewDetails = App\Models\Product::with('review')->find($product->id);
+                                                                    if ($product_reviewDetails) {
+                                                                    $reviewsCount = $product_reviewDetails->review->count();
+                                                                    $reviews = $product_reviewDetails->review;
+                                                                    if ($reviews->count() > 0) {
+                                                                        $averageRating = $reviews->avg('rating');
+                                                                    } else {
+                                                                        $averageRating = 0;
+                                                                    }
+                                                                    } else {
+                                                                    $averageRating = 0;
+                                                                    }
                                                                     @endphp
-                                                                        @if( isset($averageRating) && ($averageRating) == 5 )
-                                                                            <div class="rating allStar">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 4.5) && ($averageRating <= 4.9))
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 4) && ($averageRating <= 4.4) )
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 3.5) && ($averageRating <= 3.9) )
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 3) && ($averageRating <= 3.4) )
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 2.5) && ($averageRating <= 2.9) )
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 2) && ($averageRating <= 2.4) )
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 1.5) && ($averageRating <= 1.9) )
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 1) && ($averageRating <= 1.4) )
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @elseif( isset($averageRating) && ($averageRating >= 0.1) && ($averageRating <= 0.9) )
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @else 
-                                                                            <div class="rating">
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                                <i class="fa fa-star norating"></i>
-                                                                            </div>
-                                                                        @endif
-                                                                    
+                                                                    @if(isset($averageRating) && ($averageRating) == 5)
+                                                                    <div class="rating allStar">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 4.5) && ($averageRating <= 4.9))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 4) && ($averageRating <= 4.4))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 3.5) && ($averageRating <= 3.9))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 3) && ($averageRating <= 3.4))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 2.5) && ($averageRating <= 2.9))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 2) && ($averageRating <= 2.4))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 1.5) && ($averageRating <= 1.9))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 1) && ($averageRating <= 1.4))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @elseif(isset($averageRating) && ($averageRating >= 0.1) && ($averageRating <= 0.9))
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @else
+                                                                    <div class="rating">
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                        <i class="fa fa-star norating"></i>
+                                                                    </div>
+                                                                    @endif
+
                                                                     <a href="{{ route('product-details', $product->slug) }}">
                                                                         <h6>{{ $product->title }}</h6>
                                                                     </a>
 
                                                                     @if($product->ProductAttribute->count() > 0)
-                                                                        @php
-                                                                            $getPrice = App\Models\ProductAttribute::getPrice($product->id);
-                                                                            $allPrice = [$getPrice['minPrice'], $getPrice['maxPrice']];
-                                                                            $variationPrice = "";
+                                                                    @php
+                                                                    // Initialize an array to hold all prices including variation prices and the default regular price
+                                                                    $allPrices = $product->ProductAttribute->pluck('regular_price')->toArray();
 
-                                                                            if ($getPrice['minPrice'] == $getPrice['maxPrice']) {
-                                                                                // If minimum and maximum prices are the same, just display one price
-                                                                                $variationPrice = "৳" . $getPrice['minPrice'];
-                                                                            } else {
-                                                                                // If prices are different, display the price range
-                                                                                $variationPrice = "৳" . min($allPrice) . " - ৳" . max($allPrice);
-                                                                            }
-                                                                        @endphp
-                                                                        <h4>{{ $variationPrice }}</h4>
+                                                                    $allPrices[] = $product->regular_price;
+
+                                                                    if (!is_null($product->offer_price) && !empty($allPrices)) {
+                                                                        $allPrices[] = $product->offer_price;
+                                                                    }
+                                                                    $allPrices = array_filter($allPrices);
+
+                                                                    // Calculate the variation price
+                                                                    if (empty($allPrices)) {
+                                                                        $variationPrice = "৳" . $product->regular_price;
+                                                                    } else {
+                                                                        // Determine the minimum and maximum prices
+                                                                        $minPrice = min($allPrices);
+                                                                        $maxPrice = max($allPrices);
+
+                                                                        // Format the variation price
+                                                                        if ($minPrice === $maxPrice) {
+                                                                            $variationPrice = "৳" . $minPrice;
+                                                                        } else {
+                                                                            $variationPrice = "৳" . $minPrice . " - ৳" . $maxPrice;
+                                                                        }
+                                                                    }
+                                                                    @endphp
+
+                                                                    <h4>{{ $variationPrice }}</h4>
                                                                     @else
-                                                                        @if(!is_null($product->offer_price))
-                                                                            <h4>৳{{ $product->offer_price }} <span class="old-price"><del>৳{{$product->regular_price}}</del></span> </h4>
-                                                                        @else
-                                                                            <h4>৳{{ $product->regular_price }}</h4>    
-                                                                        @endif
+                                                                    @if (!is_null($product->offer_price))
+                                                                    <h4>৳{{ $product->offer_price }} <span class="old-price"><del>৳{{$product->regular_price}}</del></span> </h4>
+                                                                    @else
+                                                                    <h4>৳{{ $product->regular_price }}</h4>
+                                                                    @endif
                                                                     @endif
 
                                                                 </div>
-                                                                    <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm">
-                                                                        @csrf
-                                                                        <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
-                                                                        <input type="hidden" name="productId" value="{{$product->id}}">
-                                                                        {{-- product attribute --}}
-                                                                        
-                                                                        
-                                                                        @if( ($product->ProductAttribute->count() > 0) )
-                                                                            <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
-                                                                                <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                                Select Option
-                                                                            </a>
+                                                                <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm" class="cartForm">
+                                                                    @csrf
+                                                                    <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
+                                                                    <input type="hidden" name="productId" value="{{$product->id}}">
+
+                                                                    {{-- product attribute --}}
+                                                                    @if(($product->ProductAttribute->count() > 0))
+                                                                        <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
+                                                                            <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                                            Select Option
+                                                                        </a>
+                                                                    @else
+                                                                        @if($product->quantity != 0)
+                                                                            <button class="btn btn-solid hover-solid btn-animation btnAddto btnAddtoCart" type="button">
+                                                                                <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                                                Add to cart
+                                                                            </button>
                                                                         @else
-                                                                            @if( $product->quantity != 0 )
-                                                                                @if( App\Models\Cart::totalItems()->where('product_id', $product->id)->count() == 0 )
-                                                                                    <button id="cartEffect" class="btn btn-solid hover-solid btn-animation btnAddto" type="submit">
-                                                                                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                                        Add to cart
-                                                                                    </button>
-                                                                                @else
-                                                                                    <a href="{{ route('cart-manage') }}" class="btn btn-solid hover-solid btnAddto ExistCart">
-                                                                                        <i class="fa fa-eye text-theme" style="color: #fff !important"></i>
-                                                                                        Exist Your Cart
-                                                                                    </a>
-                                                                                @endif
-                                                                            @else
-                                                                                <button class="btn btn-solid hover-solid btnAddto notAvailble">
-                                                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                                                    Not Available!
-                                                                                </button>
-                                                                            @endif
+                                                                            <button class="btn btn-solid hover-solid btnAddto notAvailble">
+                                                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                                                                Not Available!
+                                                                            </button>
                                                                         @endif
-                                                                    </form>
+                                                                    @endif
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @endforeach 
+                                                @endforeach
                                             @else
-                                            <div class="bg bg-warning">Sorry!! No Product Found</div>
+                                                <div class="bg bg-warning">Sorry!! No Product Found</div>
                                             @endif
                                         </div>
                                     </div>

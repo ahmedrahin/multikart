@@ -535,12 +535,15 @@ header{
 .text-danger {
     font-weight: 700 !important;
 }
-#top-review{
+#top-review, .customer-review{
     background: #f3f3f382;
     width: 80%;
     padding: 30px;
     border-radius: 6px;
     border: 1px solid #eee;
+}
+.customer-review {
+    margin-top: 30px;
 }
 #top-review label{
     font-weight: 600;
@@ -557,7 +560,7 @@ header{
 #top-review .alert-warning a {
     color: white;
 }
-#top-review h3 {
+#top-review h3, .customer-review h3 {
     color: #222;
     font-weight: 700;
     margin-bottom: 25px;
@@ -1128,4 +1131,80 @@ select {
     color: #ff0000c9;
     cursor: pointer;
     visibility: hidden;
+}
+.allReview img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.allReview li {
+    list-style: none;
+}
+.allReview ul{
+    display: flex;
+}
+.allReview .messageItem {
+    background: #eeeeee9e;
+    width: 40%;
+    margin-left: 18px;
+    padding: 15px;
+    padding-left: 20px;
+    border-radius: 5px;
+    position: relative;
+    padding-top: 30px;
+}
+.allReview .messageItem::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #eeeeee9e;
+    left: -6px;
+    transform: rotate(45deg);
+    top: 23px;
+}
+.allReview .messageItem .rating {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+}
+.allReview .messageItem span{
+    font-weight: 700;
+    color: #000000c7;
+    margin-bottom: 5px;
+    display: block;
+}
+.allReview .messageItem p{
+    font-size: 13px !important;
+    font-style: italic;
+}
+.allReview {
+    margin-bottom: 20px;
+}
+.allReview .rating.fiveStar i:last-child {
+    color: #ffa200 !important;
+}
+.loader .spinner-border-sm {
+    width: 2rem;
+    height: 2rem;
+    border-width: .3em;
+    color: #FF4C3B;
+}
+.loader{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff9c;
+    z-index: -1;
+    visibility: hidden;
+}
+.padding {
+    padding: 8px 0 !important;
+}
+.notAvailble {
+    padding: 8px !important;
 }

@@ -157,156 +157,18 @@
                         </div>
                     </li>
 
+                    {{-- cart item start --}}
                     <li class="onhover-div mobile-cart">
-                        <div>
-                            <img src="{{asset('frontend/images/cart.png')}}" class="img-fluid blur-up lazyload" alt="">
-                            <i  class="ti-shopping-cart"></i>
+                        <div class="cart-items">
+                            @include('frontend.includes.cartItem')
                         </div>
-                        <span class="cart_qty_cls" id="cart_qty_cls">
-                            {{ App\Models\Cart::totalQunt() }}                          
-                        </span>
-                        @if( App\Models\Cart::totalItems()->count() != 0 )
-                            <ul class="show-div shopping-cart" id="shoppingCart">
-                                @foreach( App\Models\Cart::totalItems()->take(3) as $cart )
-                                    @if( $cart->product->status == 1 )
-                                        <li>
-                                            <div class="media">
-                                                @if( !is_null( $cart->product->thumb_image ) )
-                                                    <div>
-                                                        <a href="{{ route('product-details', $cart->product->slug) }}">
-                                                            <img src="{{asset('uploads/product/thumb_image/' . $cart->product->thumb_image )}}" alt="" class="me-3">
-                                                        </a>
-                                                    </div>
-                                                @else
-                                                    <div>
-                                                        <a href="{{ route('product-details', $cart->product->slug) }}">
-                                                            <img src="{{asset('frontend/images/null.jpg')}}" alt="" class="me-3">
-                                                        </a>
-                                                    </div>
-                                                @endif
-                                                <div class="media-body">
-                                                    <a href="{{ route('product-details', $cart->product->slug) }}">
-                                                        <h4>
-                                                            {{ $cart->product->title }}
-                                                        </h4>
-                                                    </a>
-                                                    <h4>
-                                                        <span>
-                                                            @if( !is_null( $cart->product->offer_price ) )
-                                                                {{ $cart->product_quantity }} pcs x ৳{{ $cart->product->offer_price }}
-                                                            @else
-                                                                {{ $cart->product_quantity }} pcs x ৳{{ $cart->product->regular_price }}
-                                                            @endif
-                                                        </span>
-                                                    </h4>
-                                                </div>
-                                            </div>
-                                            <div class="close-circle">
-                                                <form action="{{ route('cart-delete', $cart->id) }}" method="POST" name="delCart">
-                                                    @csrf 
-                                                    @method('DELETE')
-                                                    <input type="hidden" class="cartId" value="{{$cart->id}}">
-                                                    <button type="submit" class="deleteCart">
-                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </li>
-                                    @endif
-                                @endforeach
-                                <li>
-                                    <div class="total">
-                                        <h5>subtotal : <span>৳{{ App\Models\Cart::totalAmount() }}</span></h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="total totalItem">
-                                        <h5>Total Cart : <span>{{ App\Models\Cart::totalItems()->count() }}</span></h5>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="buttons">
-                                        <a href="{{ route('cart-manage') }}" class="view-cart">view cart</a> 
-                                        <a href="{{ url('/checkout') }}" class="checkout">checkout</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        @else
-                            <ul class="show-div shopping-cart">
-                                <p>No Item Added Into Cart!</p>
-                            </ul>
-                        @endif
                     </li>
+                    {{-- cart item end --}}
 
                     <li class="onhover-div mobile-setting">
-                        <div>
-                            <img src="{{asset('frontend/images/wishlist.jpg')}}" class="img-fluid blur-up lazyload wishlist" alt=""><i class="ti-settings"></i>
+                        <div class="wishlist-items">
+                            @include('frontend.includes.wishlistItem')
                         </div>
-                        <span class="cart_qty_cls">
-                            {{ App\Models\Wishlist::totalItem() }}                          
-                        </span>
-                        @if( App\Models\Wishlist::totalPsc()->count() != 0 )
-                                <ul class="show-div shopping-cart">
-                                    @foreach( App\Models\Wishlist::totalPsc()->take(2) as $wishlist )
-                                        <li>
-                                            <div class="media">
-                                                @if( !is_null( $wishlist->product->thumb_image ) )
-                                                    <div>
-                                                        <a href="{{ route('product-details', $wishlist->product->slug) }}">
-                                                            <img src="{{asset('uploads/product/thumb_image/' . $wishlist->product->thumb_image )}}" alt="" class="me-3">
-                                                        </a>
-                                                    </div>
-                                                @else
-                                                    <div>
-                                                        <a href="{{ route('product-details', $wishlist->product->slug) }}">
-                                                            <img src="{{asset('frontend/images/null.jpg')}}" alt="" class="me-3">
-                                                        </a>
-                                                    </div>
-                                                @endif
-                                                <div class="media-body">
-                                                    <a href="{{ route('product-details', $wishlist->product->slug) }}">
-                                                        <h4>
-                                                            {{ $wishlist->product->title }}
-                                                        </h4>
-                                                    </a>
-                                                    <h4>
-                                                        <span>
-                                                            @if( !is_null( $wishlist->product->offer_price ) )
-                                                                ৳{{ $wishlist->product->offer_price }}
-                                                            @else
-                                                                ৳{{ $wishlist->product->regular_price }}
-                                                            @endif
-                                                        </span>
-                                                    </h4>
-                                                </div>
-                                            </div>
-                                            <div class="close-circle">
-                                                <form action="{{ route('del-wishlist', $wishlist->id) }}" method="POST">
-                                                    @csrf 
-                                                    @method('DELETE')
-                                                    <button type="submit" class="deleteWishlist">
-                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                    <li>
-                                        <div class="total">
-                                            <h5>Total Item : <span>{{ App\Models\Wishlist::totalItem() }} Item</span></h5>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="buttons">
-                                            <a href="{{ route('manage-wishlist') }}" class="view-wishlist">View All Wishlist</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            @else
-                                <ul class="show-div shopping-cart">
-                                    <p>No Item Added Into Wishlist!</p>
-                                </ul>
-                            @endif
                     </li>
                 </ul>
             </div>

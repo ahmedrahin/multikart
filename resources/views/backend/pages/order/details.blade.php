@@ -122,7 +122,22 @@
                                                                     <td>
                                                                         <a href="{{route('product-detail', $item->product->id)}}" style="color:#172b4d;" target="_blank">
                                                                             {{ $item->product->title }}
+                                                                            {{-- if has product variation --}}
+                                                                            @php
+                                                                                $attrs = $item->product->OrderVariation;
+                                                                            @endphp
+                                                                            @if( $attrs->count() != 0 )
+                                                                                <span class="variationItem">(
+                                                                                    @foreach($attrs as $index => $attr)
+                                                                                        {{ $attr->VariationValue->ProductVariation->var_name }}-{{ $attr->VariationValue->option }}
+                                                                                        @if($index < count($attrs) - 1)
+                                                                                            |
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                )</span>
+                                                                            @endif
                                                                         </a>
+                                                                        
                                                                     </td>
                                                                     <td>৳{{ $item->prdtc_unt_pri }}</td>
                                                                     <td>{{ $item->product_quantity }}</td>
@@ -167,7 +182,22 @@
                                                             @foreach( $items as $item )
                                                                 <tr>
                                                                     <td>{{++$sl}}</td>
-                                                                    <td>{{ $item->product->title }}</td>
+                                                                    <td>
+                                                                        {{ $item->product->title }}
+                                                                        @php
+                                                                            $attrs = $item->product->OrderVariation;
+                                                                        @endphp
+                                                                        @if( $attrs->count() != 0 )
+                                                                            <span class="variationItem">(
+                                                                                @foreach($attrs as $index => $attr)
+                                                                                    {{ $attr->VariationValue->ProductVariation->var_name }}-{{ $attr->VariationValue->option }}
+                                                                                    @if($index < count($attrs) - 1)
+                                                                                        |
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            )</span>
+                                                                        @endif
+                                                                    </td>
                                                                     <td>৳{{ $item->prdtc_unt_pri }}</td>
                                                                     <td>{{ $item->product_quantity }}</td>
                                                                     <td>৳{{ $item->prdtc_unt_pri * $item->product_quantity }}</td>

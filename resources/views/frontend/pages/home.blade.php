@@ -298,39 +298,31 @@
                                                     <h4>৳{{ $product->regular_price }}</h4>    
                                                 @endif
                                             </div>
-                                                <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm">
-                                                    @csrf
-                                                    <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
-                                                    <input type="hidden" name="productId" value="{{$product->id}}">
-                                                    {{-- product attribute --}}
-                                                    
-                                                    
-                                                    @if( ($product->ProductAttribute->count() > 0) )
-                                                        <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
-                                                            <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                            Select Option
-                                                        </a>
+                                            <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm" class="cartForm">
+                                                @csrf
+                                                <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
+                                                <input type="hidden" name="productId" value="{{$product->id}}">
+
+                                                {{-- product attribute --}}
+                                                @if(($product->ProductAttribute->count() > 0))
+                                                    <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
+                                                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                        Select Option
+                                                    </a>
+                                                @else
+                                                    @if($product->quantity != 0)
+                                                        <button class="btn btn-solid hover-solid btn-animation btnAddto btnAddtoCart" type="button">
+                                                            <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                            Add to cart
+                                                        </button>
                                                     @else
-                                                        @if( $product->quantity != 0 )
-                                                            @if( App\Models\Cart::totalItems()->where('product_id', $product->id)->count() == 0 )
-                                                                <button id="cartEffect" class="btn btn-solid hover-solid btn-animation btnAddto" type="submit">
-                                                                    <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                    Add to cart
-                                                                </button>
-                                                            @else
-                                                                <a href="{{ route('cart-manage') }}" class="btn btn-solid hover-solid btnAddto ExistCart">
-                                                                    <i class="fa fa-eye text-theme" style="color: #fff !important"></i>
-                                                                    Exist Your Cart
-                                                                </a>
-                                                            @endif
-                                                        @else
-                                                            <button class="btn btn-solid hover-solid btnAddto notAvailble">
-                                                                <i class="fa fa-times" aria-hidden="true"></i>
-                                                                Not Available!
-                                                            </button>
-                                                        @endif
+                                                        <button class="btn btn-solid hover-solid btnAddto notAvailble">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                            Not Available!
+                                                        </button>
                                                     @endif
-                                                </form>
+                                                @endif
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -569,39 +561,31 @@
                                                                     <h4>৳{{ $product->regular_price }}</h4>    
                                                                 @endif
                                                             </div>
-                                                                <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm">
-                                                                    @csrf
-                                                                    <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
-                                                                    <input type="hidden" name="productId" value="{{$product->id}}">
-                                                                    {{-- product attribute --}}
-                                                                    
-                                                                    
-                                                                    @if( ($product->ProductAttribute->count() > 0) )
-                                                                        <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
-                                                                            <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                            Select Option
-                                                                        </a>
+                                                            <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm" class="cartForm">
+                                                                @csrf
+                                                                <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
+                                                                <input type="hidden" name="productId" value="{{$product->id}}">
+
+                                                                {{-- product attribute --}}
+                                                                @if(($product->ProductAttribute->count() > 0))
+                                                                    <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
+                                                                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                                        Select Option
+                                                                    </a>
+                                                                @else
+                                                                    @if($product->quantity != 0)
+                                                                        <button class="btn btn-solid hover-solid btn-animation btnAddto btnAddtoCart" type="button">
+                                                                            <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                                            Add to cart
+                                                                        </button>
                                                                     @else
-                                                                        @if( $product->quantity != 0 )
-                                                                            @if( App\Models\Cart::totalItems()->where('product_id', $product->id)->count() == 0 )
-                                                                                <button id="cartEffect" class="btn btn-solid hover-solid btn-animation btnAddto" type="submit">
-                                                                                    <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                                    Add to cart
-                                                                                </button>
-                                                                            @else
-                                                                                <a href="{{ route('cart-manage') }}" class="btn btn-solid hover-solid btnAddto ExistCart">
-                                                                                    <i class="fa fa-eye text-theme" style="color: #fff !important"></i>
-                                                                                    Exist Your Cart
-                                                                                </a>
-                                                                            @endif
-                                                                        @else
-                                                                            <button class="btn btn-solid hover-solid btnAddto notAvailble">
-                                                                                <i class="fa fa-times" aria-hidden="true"></i>
-                                                                                Not Available!
-                                                                            </button>
-                                                                        @endif
+                                                                        <button class="btn btn-solid hover-solid btnAddto notAvailble">
+                                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                                            Not Available!
+                                                                        </button>
                                                                     @endif
-                                                                </form>
+                                                                @endif
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -834,39 +818,31 @@
                                                                 <h4>৳{{ $product->regular_price }}</h4>    
                                                             @endif
                                                         </div>
-                                                            <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm">
-                                                                @csrf
-                                                                <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
-                                                                <input type="hidden" name="productId" value="{{$product->id}}">
-                                                                {{-- product attribute --}}
-                                                                
-                                                                
-                                                                @if( ($product->ProductAttribute->count() > 0) )
-                                                                    <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
-                                                                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                        Select Option
-                                                                    </a>
+                                                        <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm" class="cartForm">
+                                                            @csrf
+                                                            <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
+                                                            <input type="hidden" name="productId" value="{{$product->id}}">
+
+                                                            {{-- product attribute --}}
+                                                            @if(($product->ProductAttribute->count() > 0))
+                                                                <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
+                                                                    <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                                    Select Option
+                                                                </a>
+                                                            @else
+                                                                @if($product->quantity != 0)
+                                                                    <button class="btn btn-solid hover-solid btn-animation btnAddto btnAddtoCart" type="button">
+                                                                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                                        Add to cart
+                                                                    </button>
                                                                 @else
-                                                                    @if( $product->quantity != 0 )
-                                                                        @if( App\Models\Cart::totalItems()->where('product_id', $product->id)->count() == 0 )
-                                                                            <button id="cartEffect" class="btn btn-solid hover-solid btn-animation btnAddto" type="submit">
-                                                                                <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                                Add to cart
-                                                                            </button>
-                                                                        @else
-                                                                            <a href="{{ route('cart-manage') }}" class="btn btn-solid hover-solid btnAddto ExistCart">
-                                                                                <i class="fa fa-eye text-theme" style="color: #fff !important"></i>
-                                                                                Exist Your Cart
-                                                                            </a>
-                                                                        @endif
-                                                                    @else
-                                                                        <button class="btn btn-solid hover-solid btnAddto notAvailble">
-                                                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                                                            Not Available!
-                                                                        </button>
-                                                                    @endif
+                                                                    <button class="btn btn-solid hover-solid btnAddto notAvailble">
+                                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                                        Not Available!
+                                                                    </button>
                                                                 @endif
-                                                            </form>
+                                                            @endif
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1061,39 +1037,31 @@
                                                                 <h4>৳{{ $product->regular_price }}</h4>    
                                                             @endif
                                                         </div>
-                                                            <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm">
-                                                                @csrf
-                                                                <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
-                                                                <input type="hidden" name="productId" value="{{$product->id}}">
-                                                                {{-- product attribute --}}
-                                                                
-                                                                
-                                                                @if( ($product->ProductAttribute->count() > 0) )
-                                                                    <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
-                                                                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                        Select Option
-                                                                    </a>
+                                                        <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm" class="cartForm">
+                                                            @csrf
+                                                            <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
+                                                            <input type="hidden" name="productId" value="{{$product->id}}">
+
+                                                            {{-- product attribute --}}
+                                                            @if(($product->ProductAttribute->count() > 0))
+                                                                <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
+                                                                    <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                                    Select Option
+                                                                </a>
+                                                            @else
+                                                                @if($product->quantity != 0)
+                                                                    <button class="btn btn-solid hover-solid btn-animation btnAddto btnAddtoCart" type="button">
+                                                                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                                        Add to cart
+                                                                    </button>
                                                                 @else
-                                                                    @if( $product->quantity != 0 )
-                                                                        @if( App\Models\Cart::totalItems()->where('product_id', $product->id)->count() == 0 )
-                                                                            <button id="cartEffect" class="btn btn-solid hover-solid btn-animation btnAddto" type="submit">
-                                                                                <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                                                Add to cart
-                                                                            </button>
-                                                                        @else
-                                                                            <a href="{{ route('cart-manage') }}" class="btn btn-solid hover-solid btnAddto ExistCart">
-                                                                                <i class="fa fa-eye text-theme" style="color: #fff !important"></i>
-                                                                                Exist Your Cart
-                                                                            </a>
-                                                                        @endif
-                                                                    @else
-                                                                        <button class="btn btn-solid hover-solid btnAddto notAvailble">
-                                                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                                                            Not Available!
-                                                                        </button>
-                                                                    @endif
+                                                                    <button class="btn btn-solid hover-solid btnAddto notAvailble">
+                                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                                        Not Available!
+                                                                    </button>
                                                                 @endif
-                                                            </form>
+                                                            @endif
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>

@@ -27,7 +27,6 @@
 
 {{-- search box --}}
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
 <script>
     $.ajaxSetup({
         headers: {
@@ -128,44 +127,6 @@
     })
 
 </script>
-
-{{-- cart remove --}}
-<script>
-
-    let deleteCart = document.querySelectorAll('.deleteCart');
-    let shoppingCart = document.getElementById('shoppingCart');
-    let subtotalElement = document.querySelector('.total span');
-    let totalItemsElement = document.querySelector('.totalItem span');
-    const cartId = document.querySelector('.cartId').value;
-
-    deleteCart.forEach(function(cart){
-        cart.addEventListener('click', () => {
-            event.preventDefault();
-
-            let delCart = cart.closest('form');
-            let xhrCart = new XMLHttpRequest(); 
-            xhrCart.open('DELETE', delCart.getAttribute('action'), true); 
-            xhrCart.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}'); 
-            xhrCart.onreadystatechange = function () {
-                if (xhrCart.readyState === XMLHttpRequest.DONE) {
-                    if (xhrCart.status === 200) {
-                        // Slide up animation before removing the deleted item from the DOM
-                        $(cart.closest('li')).slideUp(300, function(){
-                            this.remove();
-                        });
-                        toastr.warning('The Item Removed From Cart', '', {"positionClass": "toast-top-right", "closeButton": true});
-                        
-                    } else {
-                        console.error('Error:', xhrCart.status);
-                    }
-                }
-            };
-            xhrCart.send(); // Send the AJAX request
-        });
-    });
-
-</script>
-
 
 <script>
     $(window).on('load', function () {
@@ -273,11 +234,11 @@
 <script>
     let existWishlist    = document.getElementById('existWishlist');
     // let btnExistWishlist = document.querySelectorAll('.existWishlist');
-    if( existWishlist ){
-        existWishlist.onclick = (e) => {
-        e.preventDefault();
-        toastr.info('The Product is exist in Wishlist', '', {"positionClass": "toast-top-right", "closeButton": true});
-    }
+        if( existWishlist ){
+            existWishlist.onclick = (e) => {
+            e.preventDefault();
+            toastr.info('The Product is exist in Wishlist', '', {"positionClass": "toast-top-right", "closeButton": true});
+        }
     }
     // btnExistWishlist.forEach(function(exist){
     //     exist.onclick = (e) => {
@@ -288,10 +249,219 @@
     // })
 </script>
 
-
-{{-- Add art Ajax --}}
-
+{{-- add to cart --}}
 <script>
+   $(document).ready(function() {
+        $('.btnAddtoCart').click(function() {
+            var $form = $(this).closest('.cartForm');
+            var $button = $(this);
+            var formData = $form.serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: $form.attr('action'),
+                data: formData,
+                beforeSend : function()
+                {
+                    $button.prop('disabled', true).html(`
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    `);
+                    $button.addClass('padding');
+                },
+                success: function(response) {
+                    toastr.success(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                    $('.cart-items').html(response.html);
+                    $button.removeClass('padding');
+                    $button.prop('disabled', false).html(`
+                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
+                        Add to cart
+                    `);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    $button.prop('disabled', false).html(`
+                        <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
+                        Add to cart
+                    `);
+                    // Handle error response for the specific form
+                    console.error('Error adding product to cart:', errorThrown);
+                }
+            });
+        });
+    });
+</script>
+
+{{-- delete cart item  --}}
+<script>
+    $(document).on('click', '.deleteCart', function(e) {
+        e.preventDefault();
+        var formId = $(this).data('form-id');
+        var $form = $('#delCartForm_' + formId);
+        var id = $form.find('.cartId').val();
+        delCart(id, $form);
+    });
+
+    function delCart(id, $form)
+    {
+        if(id != '')
+        {
+            $.ajax({
+                type : 'DELETE',
+                url: '/carts/delete/' + id,
+                beforeSend : function()
+                {
+                    $("#shoppingCart .loader").css('z-index', '2');
+                    $("#shoppingCart .loader").css('visibility', 'visible');
+
+                    var currentUrl = window.location.href;
+                    if( currentUrl.includes('carts') ){
+                        $(".cartLists .loader").css('z-index', '2');
+                        $(".cartLists .loader").css('visibility', 'visible');
+                    }
+                },
+                success : function(response)
+                {
+                    toastr.info(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                    $form.closest('.cart-items').html(response.html);
+
+                    $("#shoppingCart .loader").css('z-index', '-1');
+                    $("#shoppingCart .loader").css('visibility', 'hidden');
+                    
+                    //redirect to all-product-page if cart item is null
+                    var qynt = parseInt($('.qynt').val());
+                    var currentUrl = window.location.href;
+                    if (currentUrl.includes('checkout') && (qynt === 0)) {
+                        window.location.href = "{{ route('all-products') }}";
+                    }else if( currentUrl.includes('carts') ){
+                        if( qynt === 0 ){
+                            window.location.href = "{{ route('all-products') }}";
+                        }else {
+                            $('#cartItems').html(response.cartItem)
+                            $(".cartLists .loader").css('z-index', '-1');
+                            $(".cartLists .loader").css('visibility', 'hidden');
+                            $("#cartsAmn").html("৳" + $('.amn').val());
+                        }
+                        
+                    } else if( currentUrl.includes('wishlists') ){
+                        $('.wishlistBody').html(response.delWc)
+                    }
+                }
+            })
+        }
+    }      
+</script>
+
+ {{-- add wishlist item --}}
+ <script>
+   $(document).ready(function() {
+        $('.btnAddWs').click(function() {
+            addWishlist($(this));
+        });
+    });
+
+    function addWishlist($button) {
+        var $form = $button.closest('.wishlistForm'); // Use $button instead of $(this)
+        var formData = $form.serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: $form.attr('action'),
+            data: formData,
+            beforeSend: function() {
+                $button.prop('disabled', true).html(`
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                `);
+                $button.css('width', '146px');
+            },
+            success: function(response) {
+                toastr.success(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                $('.wishlist-items').html(response.html);
+                $button.prop('disabled', false).html(`
+                    <i class="fa fa-bookmark fz-16 me-2" aria-hidden="true"></i>
+                    wishlist
+                `);
+                $button.attr('id', 'existWishlist');
+                $button.removeClass('btnAddWs');
+
+                // Rebind click event for the new button ID
+                $button.off('click').on('click', function(e) {
+                    e.preventDefault();
+                    toastr.info('The Product is exist in Wishlist', '', {"positionClass": "toast-top-right", "closeButton": true});
+                });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                // Handle error response for the specific form
+                console.error('Error adding product to cart:', errorThrown);
+            }
+        });
+    }
 
 </script>
+
+{{-- wishlist item delete --}}
+<script>
+     $(document).on('click', '.deleteWishlist', function(e) {
+        e.preventDefault();
+        var formId = $(this).data('form-id');
+        var $form = $('#delWishlistForm_' + formId);
+        var id = $form.find('.wishlistId').val();
+        delWishlist(id, $form);
+    });
+
+    function delWishlist(id, $form)
+    {
+        if(id != '')
+        {
+            $.ajax({
+                type : 'DELETE',
+                url: $form.attr('action'),
+                beforeSend : function()
+                {
+                    $("#wishlistItemsAll .loader").css('z-index', '2');
+                    $("#wishlistItemsAll .loader").css('visibility', 'visible');
+
+                    var currentUrl = window.location.href;
+                    if( currentUrl.includes('wishlists') ){
+                        $(".wishlistLists .loader").css('z-index', '2');
+                        $(".wishlistLists .loader").css('visibility', 'visible');
+                    }
+                },
+                success : function(response)
+                {
+                    toastr.info(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                    $form.closest('.wishlist-items').html(response.html);
+
+                    $("#wishlistItemsAll .loader").css('z-index', '-1');
+                    $("#wishlistItemsAll .loader").css('visibility', 'hidden');
+
+                    // again click add wisihlist button
+                    $('.wishlistBeforesend').html(`
+                        <button class="btn btn-solid btnAddWs" type="button" style="padding: 8px 25px;margin-left: 13px;">
+                            <i class="fa fa-bookmark fz-16 me-2" aria-hidden="true"></i>
+                            wishlist
+                        </button>
+                    `);
+                    $(document).on('click', '.btnAddWs', function() {
+                        addWishlist($(this));
+                    });
+
+                     //redirect to all-product-page if wishlist item is null
+                    var wcqunt = parseInt($('.wcqunt').val());
+                    var currentUrl = window.location.href;
+                    if (currentUrl.includes('wishlists') && (wcqunt === 0)) {
+                        window.location.href = "{{ route('all-products') }}";
+                    }else if( currentUrl.includes('wishlists') ){
+                        if( wcqunt === 0 ){
+                            window.location.href = "{{ route('all-products') }}";
+                        }else {
+                            $('.wishlistBody').html(response.delWc)
+                            $(".wishlistLists .loader").css('z-index', '-1');
+                            $(".wishlistLists .loader").css('visibility', 'hidden');
+                        }
+                    }
+                }
+            })
+        }
+    }  
+</script>
+
 @yield('page-script')

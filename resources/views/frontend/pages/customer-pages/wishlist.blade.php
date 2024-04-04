@@ -37,7 +37,7 @@
         <div class="container">
             <div class="row">
                 @if( $wishlists->count() != 0 )
-                    <div class="col-sm-12 table-responsive-xs">
+                    <div class="col-sm-12 table-responsive-xs wishlistLists">
                         <table class="table cart-table">
                             <thead>
                                 <tr class="table-head">
@@ -49,91 +49,13 @@
                                 </tr>
                             </thead>
                             <tbody class="wishlistBody">
-                                @foreach ($wishlists as $wishlist)
-                                    <tr>
-                                        <td>
-                                            @if( !is_null( $wishlist->product->thumb_image ) )
-                                                <div>
-                                                    <a href="{{ route('product-details', $wishlist->product->slug) }}">
-                                                        <img src="{{asset('uploads/product/thumb_image/' . $wishlist->product->thumb_image )}}" alt="">
-                                                    </a>
-                                                </div>
-                                            @else
-                                                <div>
-                                                    <a href="{{ route('product-details', $wishlist->product->slug) }}">
-                                                        <img src="{{asset('frontend/images/null.jpg')}}" alt="">
-                                                    </a>
-                                                </div>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('product-details', $wishlist->product->slug) }}">{{ $wishlist->product->title }}</a>
-                                            <div class="mobile-cart-content row">
-                                                <div class="col">
-                                                    <p>in stock</p>
-                                                </div>
-                                                <div class="col">
-                                                    <h2 class="td-color">$63.00</h2>
-                                                </div>
-
-                                                <div class="col">
-                                                    <h2 class="td-color">
-                                                        <a href="#" class="icon me-1"><i class="ti-close"></i></a>
-                                                        <a href="#" class="cart"><i class="ti-shopping-cart"></i></a>
-                                                    </h2>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <h2>
-                                                @if( !is_null( $wishlist->product->offer_price ) )
-                                                    ৳{{ $wishlist->product->offer_price }}
-                                                @else
-                                                    ৳{{ $wishlist->product->regular_price }}
-                                                @endif
-                                            </h2>
-                                        </td>
-                                        <td>
-                                            @if( $wishlist->product->status != 1 )
-                                                <p class="unavailble">Not Available!</p>
-                                            @elseif(  $wishlist->product->quantity == 0 )
-                                                <p class="unavailble">Out of Stock</p>
-                                            @else
-                                                <p class="availble">Availble: {{ $wishlist->product->quantity }} Psc</p>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <form action="{{ route('del-wishlist', $wishlist->id) }}" method="post">
-                                                @csrf 
-                                                @method('DELETE')
-                                                <button type="submit" class="deleteWc">
-                                                    <i class="ti-close"></i>
-                                                </button>
-                                            </form>
-                                            @php
-                                                $matchingCartItem = App\Models\Cart::totalItems()->where('product_id', $wishlist->product_id)->where('user_id', $wishlist->user_id)->where('ip_address', $wishlist->ip_address)->first();
-                                            @endphp
-                                            @if( $wishlist->product->status != 1 || $wishlist->product->quantity == 0 )
-                                                <button class="deleteWc" id="notAdd">
-                                                    <i class="ti-shopping-cart"></i>
-                                                </button>
-                                            @elseif( isset($matchingCartItem) && $wishlist->product_id == $matchingCartItem->product_id )
-                                                <button class="deleteWc" id="existCart">
-                                                    <i class="ti-shopping-cart"></i>
-                                                </button>
-                                            @else
-                                                <form action="{{ route('update-wishlist', $wishlist->id) }}" method="post">
-                                                    @csrf 
-                                                    <button type="submit" class="deleteWc">
-                                                        <i class="ti-shopping-cart"></i>
-                                                    </button>
-                                                    <input type="hidden" name="quantity" value="1">
-                                                    <input type="hidden" name="productId" value="{{ $wishlist->product->id }}">
-                                                </form>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                {{-- wihslist item --}}
+                                @include('frontend.includes.wishlistDetails')
+                                
+                                {{-- loader --}}
+                                <div class="loader">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </div>
                             </tbody>
                         </table>
                     </div>
@@ -170,5 +92,56 @@
           })
         }
         
+    </script>
+
+    {{-- move wishlist to cart --}}
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.moveToCart', function() {
+                var $form = $(this).closest('.moveToCartForm');
+                var $button = $(this);
+                var formData = $form.serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: $form.attr('action'),
+                    data: formData,
+                    beforeSend: function() {
+                        $("#wishlistItemsAll .loader").css('z-index', '2');
+                        $("#wishlistItemsAll .loader").css('visibility', 'visible');
+
+                        var currentUrl = window.location.href;
+                        if (currentUrl.includes('wishlists')) {
+                            $(".wishlistLists .loader").css('z-index', '2');
+                            $(".wishlistLists .loader").css('visibility', 'visible');
+                        }
+                    },
+                    success: function(response) {
+                        toastr.info(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                        toastr.info(response.msgs, '', {"positionClass": "toast-top-right", "closeButton": true});
+                        $('.wishlist-items').html(response.html);
+                        $('.cart-items').html(response.addCart);
+
+                        $("#wishlistItemsAll .loader").css('z-index', '-1');
+                        $("#wishlistItemsAll .loader").css('visibility', 'hidden');
+
+                        //redirect to all-product-page if wishlist item is null
+                        var wcqunt = parseInt($('.wcqunt').val());
+                        var currentUrl = window.location.href;
+                        if (currentUrl.includes('wishlists') && (wcqunt === 0)) {
+                            window.location.href = "{{ route('all-products') }}";
+                        } else if (currentUrl.includes('wishlists')) {
+                            if (wcqunt === 0) {
+                                window.location.href = "{{ route('all-products') }}";
+                            } else {
+                                $('.wishlistBody').html(response.delWc)
+                                $(".wishlistLists .loader").css('z-index', '-1');
+                                $(".wishlistLists .loader").css('visibility', 'hidden');
+                            }
+                        }
+                    },
+                });
+            });
+        });
     </script>
 @endsection

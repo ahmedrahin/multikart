@@ -45,12 +45,12 @@ class CartController extends Controller
         if( !is_null( $cart ) ){
             $newQuantity = $cart->product_quantity + $quantity;
             $cart->update(['product_quantity' => $newQuantity]);
-
-            // product quantity has been increase
-            session()->flash('alert-type', 'success');
-            session()->flash('message', 'Item Quantity Updated Into Cart');
             $cart->save();
-            return redirect()->back();
+
+            return response()->json([
+                'html' => view('frontend.includes.cartItem')->render(),
+                'msg' => 'Item Quantity Updated Into Cart',
+            ]);
         }else {
             $cart = new Cart();
             if( Auth::check() ){
@@ -60,10 +60,6 @@ class CartController extends Controller
             $cart->ip_address        = request()->ip();
             $cart->product_id        = $productId;
             $cart->product_quantity  = $quantity;
-
-            // product save into the cart
-            session()->flash('alert-type', 'success');
-            session()->flash('message', 'The Item Added Into Cart');
             $cart->save();
 
             // order variation
@@ -79,7 +75,10 @@ class CartController extends Controller
                 }
             }
             
-            return redirect()->route('checkout');
+            return response()->json([
+                'html' => view('frontend.includes.cartItem')->render(),
+                'msg' => 'The Item Added Into Cart',
+            ]);
         }
     }
 
@@ -96,11 +95,11 @@ class CartController extends Controller
             $newQuantity = $cart->product_quantity + $request->quantity;
             $cart->update(['product_quantity' => $newQuantity]);
 
-            // product quantity has been increase
-            session()->flash('alert-type', 'success');
-            session()->flash('message', 'Item Quantity Updated Into Cart');
             $cart->save();
-            return redirect()->back();
+            return response()->json([
+                'html' => view('frontend.includes.cartItem')->render(),
+                'msg' => 'Item Quantity Updated Into Cart',
+            ]);
         }else {
             $cart = new Cart();
             if( Auth::check() ){
@@ -111,11 +110,11 @@ class CartController extends Controller
             $cart->product_id        = $request->productId;
             $cart->product_quantity  = $request->quantity;
 
-            // product save into the cart
-            session()->flash('alert-type', 'success');
-            session()->flash('message', 'The Item Added Into Cart');
             $cart->save();
-            return redirect()->back();
+            return response()->json([
+                'html' => view('frontend.includes.cartItem')->render(),
+                'msg' => 'The Item Added Into Cart',
+            ]);
         }
     }
 
@@ -129,26 +128,13 @@ class CartController extends Controller
         $delete = Cart::findorFail($id);
         if( !is_null( $delete ) ){
             $delete->delete();
-            return response()->json([$delete->id]);
+            return response()->json([
+                'html' => view('frontend.includes.cartItem')->render(),
+                'delWc' => view('frontend.includes.wishlistDetails')->render(),
+                'cartItem' => view('frontend.pages.order.cartItem')->render(),
+                'msg' => 'The Item Remove Form Cart',
+            ]);
         }
-    }
-
-    public function itemDestroy(string $id)
-    {
-        $delete = Cart::find($id);
-        if( !is_null( $delete ) ){
-            $delete->delete();
-            session()->flash('alert-type', 'warning');
-            session()->flash('message', 'The Item Remove Form Cart');
-        }
-        $carts = Auth::check()
-        ? Cart::where('user_id', Auth::id())->where('order_id', NULL)->get()
-        : Cart::where('ip_address', request()->ip())->where('order_id', NULL)->get();
-
-        if ($carts->isEmpty()) {
-            return redirect()->to('all-products');
-        }
-        return redirect()->back();
     }
 
     // coupon apply

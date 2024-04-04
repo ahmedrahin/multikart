@@ -1350,3 +1350,9 @@ select.featured {
 .p-t-5 {
     padding-top: 55px !important;
 }
+.variationItem{
+    font-size: 9px;
+    font-weight: 600;
+    display: block;
+    margin-top: 3px;
+}

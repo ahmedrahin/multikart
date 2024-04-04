@@ -616,8 +616,6 @@ class ProductController extends Controller
                 }
             }
             
-
-            
              // product attribute delete
              ProductAttribute::where('products_id', $update->id)->delete();
             // Update attributes
@@ -657,9 +655,6 @@ class ProductController extends Controller
                     }
                 }
             }
-
-
-
             
             $notification = array(
                 'message'    => 'Product Information Updated',

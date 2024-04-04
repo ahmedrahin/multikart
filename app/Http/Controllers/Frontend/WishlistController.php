@@ -48,10 +48,11 @@ class WishlistController extends Controller
             $wishlist->product_id        = $request->productId;
 
             // product save into the wishlist
-            session()->flash('alert-type', 'success');
-            session()->flash('message', 'The Item Added Into Wishlist');
             $wishlist->save();
-            return redirect()->back();
+            return response()->json([
+                'html' => view('frontend.includes.wishlistItem')->render(),
+                'msg' => 'The Item Added in your Wishlist',
+            ]);
          }
     }
 
@@ -70,19 +71,20 @@ class WishlistController extends Controller
 
         // remove from wishlist
         $move_cart = Wishlist::find($id);
-        if( $move_cart->product->quantity != 0 && $move_cart->product->status == 1 ){
+        
             if( !is_null(( $move_cart )) ){
                 $move_cart->delete();
-                session()->flash('alert-type', 'warning');
-                session()->flash('message', 'The Item Remove Form Wishlist');
-    
-                // product save into the cart
-                session()->flash('alert-type', 'success');
-                session()->flash('message', 'The Item Added Into Cart');
+
                 $cart->save();
-                return redirect()->back();
+                return response()->json([
+                    'html' => view('frontend.includes.wishlistItem')->render(),
+                    'delWc' => view('frontend.includes.wishlistDetails')->render(),
+                    'addCart' => view('frontend.includes.cartItem')->render(),
+                    'msg' => 'The Item Added Into Cart',
+                    'msgs' => 'The Item Remove From Wishlist',
+                ]);
             }
-        }
+    
     }
 
     // Wishlist list
@@ -147,12 +149,14 @@ class WishlistController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        $del_wishlist = Wishlist::find($id);
+        $del_wishlist = Wishlist::findorFail($id);
         $del_wishlist->delete();
-        session()->flash('alert-type', 'warning');
-        session()->flash('message', 'The Item Remove Form Wishlist');
-        return redirect()->back();
+        return response()->json([
+            'html' => view('frontend.includes.wishlistItem')->render(),
+            'delWc' => view('frontend.includes.wishlistDetails')->render(),
+            'msg' => 'The Item Remove From Wishlist',
+        ]);
     }
 }

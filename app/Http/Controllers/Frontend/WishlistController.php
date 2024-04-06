@@ -80,6 +80,7 @@ class WishlistController extends Controller
                     'html' => view('frontend.includes.wishlistItem')->render(),
                     'delWc' => view('frontend.includes.wishlistDetails')->render(),
                     'addCart' => view('frontend.includes.cartItem')->render(),
+                    'yourWc' => view('frontend.pages.customer-pages.yourWishlist')->render(),
                     'msg' => 'The Item Added Into Cart',
                     'msgs' => 'The Item Remove From Wishlist',
                 ]);

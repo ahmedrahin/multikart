@@ -1,6 +1,6 @@
 @foreach( App\Models\Cart::totalItems() as $cart )
     @if( $cart->product->status == 1 )
-        <tr>
+        <tr data-cart-id="{{ $cart->id }}">
             <td>
                 <form class="delCartForm" id="delCartForm_{{ $loop->index }}">
                     @csrf 
@@ -65,13 +65,17 @@
                 <div class="qty-box">
                     <div class="input-group">
                         <span class="input-group-prepend">
-                            <button type="button" class="btn quantity-left-minus" data-type="minus" data-field="">
+                            <button type="button" class="btn quantity-left-minus" data-type="minus">
                                 <i class="ti-angle-left"></i>
                             </button> 
                         </span>
-                        <input type="text" name="quantity" class="form-control input-number" value="{{ $cart->product_quantity }}">
+                        
+                        <input type="number" name="quantity" class="form-control input-number" value="{{ $cart->product_quantity }}" min="1">
+                        <input type="hidden" class="input-qynt" value="{{ $cart->product_quantity }}">
+                        <input type="hidden" class="totalQuant" value="{{$cart->product->quantity}}"> 
                         <span class="input-group-prepend">
-                            <button type="button" class="btn quantity-right-plus" data-type="plus" data-field="">                                           <i class="ti-angle-right"></i>
+                            <button type="button" class="btn quantity-right-plus" data-type="plus">
+                                <i class="ti-angle-right"></i>
                             </button>
                         </span>
                     </div>

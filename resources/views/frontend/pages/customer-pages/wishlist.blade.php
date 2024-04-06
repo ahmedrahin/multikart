@@ -5,7 +5,7 @@
 @endsection
 
 @section('page-css')
-    <link rel="stylesheet" href="{{ asset('frontend/fonts/icon.all.min.css') }}">
+    
 @endsection
 
 @section('body-content')

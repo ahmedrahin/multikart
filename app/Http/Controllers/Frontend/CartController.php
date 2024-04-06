@@ -120,7 +120,15 @@ class CartController extends Controller
 
     public function update(Request $request, string $id)
     {
-        //
+        $cart = Cart::findOrFail($id);
+        // Update the quantity
+        $cart->product_quantity = $request->newQuantity;
+        $cart->save();
+        return response()->json([
+            'html' => view('frontend.includes.cartItem')->render(),
+            'cartItem' => view('frontend.pages.order.cartItem')->render(),
+            'msg' => 'Item Quantity Updated Into Cart',
+        ]);
     }
 
     public function destroy(int $id)

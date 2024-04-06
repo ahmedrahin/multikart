@@ -100,4 +100,86 @@
 
 @section('page-script')
     <script src="{{ asset('frontend/js/timer1.js') }}"></script>
+
+    {{-- counter --}}
+    <script>
+        $(document).ready(function() {
+             // Function to increment quantity
+             function test(){
+                $('.quantity-right-plus').on('click', function() {
+                 var $input = $(this).closest('.qty-box').find('.input-number');
+                 var currentVal = parseInt($input.val()) || 0;
+                 var totalQuant = parseInt($input.siblings('.totalQuant').val());
+                 if (currentVal < totalQuant) {
+                     $input.val(currentVal + 1);
+                     sendAjaxRequest($input);
+                 }
+             });
+ 
+             // Function to decrement quantity
+             $('.quantity-left-minus').on('click', function() {
+                 var $input = $(this).closest('.qty-box').find('.input-number');
+                 var currentVal = parseInt($input.val()) || 0;
+                 if (currentVal > 1) {
+                     $input.val(currentVal - 1);
+                     sendAjaxRequest($input);
+                 }
+             });
+ 
+             // Function to handle input change and validation
+             $('.input-number').on('input', function() {
+                 var $input = $(this);
+                 var enteredQty = parseInt($input.val()) || 0;
+                 var totalQuant = parseInt($input.siblings('.totalQuant').val());
+                 var inputQynt = parseInt($input.siblings('.input-qynt').val());
+ 
+                 // Validate quantity
+                 if (enteredQty < 1 || isNaN(enteredQty)) {
+                     $input.val(inputQynt);
+                     toastr.warning('Value must be greater than or equal to 1', '', {"positionClass": "toast-top-right", "closeButton": true});
+                 } else if (enteredQty > totalQuant) {
+                     $input.val(totalQuant); 
+                     toastr.warning('Exceeds available quantity', '', {"positionClass": "toast-top-right", "closeButton": true});
+                     toastr.info(`Available Product is ${totalQuant} Pc`, '', {"positionClass": "toast-top-right", "closeButton": true});
+                     sendAjaxRequest($input);
+                 }else {
+                     toastr.clear();
+                     sendAjaxRequest($input);
+                 }
+ 
+                 // Enable/disable buttons based on quantity
+                 $input.siblings('.quantity-right-plus').prop('disabled', enteredQty >= totalQuant);
+                 $input.siblings('.quantity-left-minus').prop('disabled', enteredQty <= 1);
+ 
+             });
+             }
+
+             test();
+             function sendAjaxRequest($input) {
+                 var cartId = $input.closest('tr').data('cart-id');
+                 var newQuantity = $input.val();
+                 var requestData = {
+                     newQuantity: newQuantity
+                 };
+ 
+                 // Send the AJAX request
+                 $.ajax({
+                     type: 'POST',
+                     url: 'carts/update/'+cartId,
+                     data: requestData,
+                     success: function(response) {
+                         toastr.success(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                         $('#cartItems').html(response.cartItem);
+                         $('.cart-items').html(response.html);
+                         $("#cartsAmn").html("৳" + $('.amn').val());
+                         
+                         test();
+                     },
+                     error: function(xhr, textStatus, errorThrown) {
+                         console.error('Error in AJAX request:', errorThrown);
+                     }
+                 });
+             }
+        });
+    </script>
 @endsection

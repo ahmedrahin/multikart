@@ -384,74 +384,8 @@
                                                                 <th scope="col">Action</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            @php
-                                                                $sl = 0;
-                                                            @endphp
-                                                            @foreach($wishlists as $wishlist)
-                                                                <tr>
-                                                                    <td>{{ ++$sl }}</td>
-                                                                    <td>
-                                                                        @if( !is_null( $wishlist->product->thumb_image ) )
-                                                                            <div>
-                                                                                <a href="{{ route('product-details', $wishlist->product->slug) }}">
-                                                                                    <img src="{{asset('uploads/product/thumb_image/' . $wishlist->product->thumb_image )}}" alt="">
-                                                                                </a>
-                                                                            </div>
-                                                                        @else
-                                                                            <div>
-                                                                                <a href="{{ route('product-details', $wishlist->product->slug) }}">
-                                                                                    <img src="{{asset('frontend/images/null.jpg')}}" alt="">
-                                                                                </a>
-                                                                            </div>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>
-                                                                            <a href="{{ route('product-details', $wishlist->product->slug) }}" class="mt-0" style="color: black;">{{ $wishlist->product->title }}</a>
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="theme-color fs-6">
-                                                                            @if( !is_null( $wishlist->product->offer_price ) )
-                                                                                ৳{{ $wishlist->product->offer_price }}
-                                                                            @else
-                                                                                ৳{{ $wishlist->product->regular_price }}
-                                                                            @endif
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{-- <form action="{{ route('del-wishlist', $wishlist->id) }}" method="post">
-                                                                            @csrf 
-                                                                            @method('DELETE')
-                                                                            <button type="submit" class="deleteWc">
-                                                                                <i class="ti-close"></i>
-                                                                            </button>
-                                                                        </form> --}}
-                                                                        @php
-                                                                            $matchingCartItem = App\Models\Cart::totalItems()->where('product_id', $wishlist->product_id)->where('user_id', $wishlist->user_id)->where('ip_address', $wishlist->ip_address)->first();
-                                                                        @endphp
-                                                                        @if( $wishlist->product->status != 1 || $wishlist->product->quantity == 0 )
-                                                                            <button class="btn btn-xs btn-solid" id="notAdd">
-                                                                                Move to Cart
-                                                                            </button>
-                                                                        @elseif( isset($matchingCartItem) && $wishlist->product_id == $matchingCartItem->product_id )
-                                                                            <button class="btn btn-xs btn-solid" id="existCart">
-                                                                                Move to Cart
-                                                                            </button>
-                                                                        @else
-                                                                            <form action="{{ route('update-wishlist', $wishlist->id) }}" method="post">
-                                                                                @csrf 
-                                                                                <button type="submit" class="btn btn-xs btn-solid">
-                                                                                    Move to Cart
-                                                                                </button>
-                                                                                <input type="hidden" name="quantity" value="1">
-                                                                                <input type="hidden" name="productId" value="{{ $wishlist->product->id }}">
-                                                                            </form>
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
+                                                        <tbody id="yourWishlist">
+                                                            @include('frontend.pages.customer-pages.yourWishlist')                                               
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -950,5 +884,59 @@
        }
        
    </script>
+
+   {{-- move wishlist to cart --}}
+   <script>
+    $(document).ready(function() {
+        $(document).on('click', '.moveToCart', function() {
+            var $form = $(this).closest('.moveToCartForm');
+            var $button = $(this);
+            var formData = $form.serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: $form.attr('action'),
+                data: formData,
+                beforeSend: function() {
+                    $("#wishlistItemsAll .loader").css('z-index', '2');
+                    $("#wishlistItemsAll .loader").css('visibility', 'visible');
+           
+                    $button.prop('disabled', true).html(`
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    `);
+                    $button.css('width', '116px');
+                    
+                },
+                success: function(response) {
+                    toastr.info(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                    toastr.info(response.msgs, '', {"positionClass": "toast-top-right", "closeButton": true});
+                    $('.wishlist-items').html(response.html);
+                    $('.cart-items').html(response.addCart);
+
+                    $("#wishlistItemsAll .loader").css('z-index', '-1');
+                    $("#wishlistItemsAll .loader").css('visibility', 'hidden');
+
+                    //redirect to all-product-page if wishlist item is null
+                    var wcqunt = parseInt($('.wcqunt').val());
+                    var currentUrl = window.location.href;
+                    if (currentUrl.includes('wishlists') && (wcqunt === 0)) {
+                        window.location.href = "{{ route('all-products') }}";
+                    } else if (currentUrl.includes('wishlists')) {
+                        if (wcqunt === 0) {
+                            window.location.href = "{{ route('all-products') }}";
+                        } else {
+                            $('.wishlistBody').html(response.delWc)
+                            $(".wishlistLists .loader").css('z-index', '-1');
+                            $(".wishlistLists .loader").css('visibility', 'hidden');
+                        }
+                    }else if( currentUrl.includes('my-dashboard') ){
+                        $('#yourWishlist').html(response.yourWc);
+                         
+                    }
+                },
+            });
+        });
+    });
+    </script>
 @endsection
        

@@ -12,7 +12,7 @@
 @endsection
 
 @section('body-content')
-    <div class="page-content upProduct addCoupon">
+    <div class="page-content upProduct ">
          <!--breadcrumb-->
          <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">
@@ -30,7 +30,7 @@
         </div>
         <!--end breadcrumb-->
 
-        <div class="card product">
+        <div class="card product addCoupon">
             <form action="{{ route('update-cupons', $editData->id) }}" method="POST">
                 @csrf
                 @method('PUT')

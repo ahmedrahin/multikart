@@ -359,7 +359,7 @@
                                         @if( !is_null($review->user->image) )
                                             <img src="{{ asset('uploads/user/' . $review->user->image) }}" alt="">
                                         @else
-                                            <img src="{{ asset('uploads/images/default.jpg') }}" alt="">
+                                            <img src="{{ asset('backend/images/default.jpg') }}" alt="">
                                         @endif
                                     </li>
                                     <li class="messageItem">

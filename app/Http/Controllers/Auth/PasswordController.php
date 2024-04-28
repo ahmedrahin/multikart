@@ -47,12 +47,8 @@ class PasswordController extends Controller
         $user->update([
             'password' => Hash::make($request->password),
         ]);
-
-        session()->flash('alert-type', 'success');
-        session()->flash('message', 'Your Password is Updated');
-        // Logout the user
         Auth::logout();
-        return redirect('/');
+        
     }
 
 }

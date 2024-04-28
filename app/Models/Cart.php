@@ -51,9 +51,9 @@ class Cart extends Model
     // how many product in the cart
     public static function totalItems(){
         if( Auth::check() ){
-            $carts = Cart::where('user_id', Auth::id())->where('order_id', NULL)->get();
+            $carts = Cart::where('user_id', Auth::id())->where('order_id', NULL)->orderBy('created_at', 'desc')->get();
         }else {
-            $carts = Cart::where('ip_address', request()->ip())->where('order_id', NULL)->get();
+            $carts = Cart::where('ip_address', request()->ip())->where('order_id', NULL)->orderBy('created_at', 'desc')->get();
         }
         return $carts;
     }

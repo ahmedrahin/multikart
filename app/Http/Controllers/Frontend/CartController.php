@@ -140,6 +140,7 @@ class CartController extends Controller
                 'html' => view('frontend.includes.cartItem')->render(),
                 'delWc' => view('frontend.includes.wishlistDetails')->render(),
                 'cartItem' => view('frontend.pages.order.cartItem')->render(),
+                'yourWc' => view('frontend.pages.customer-pages.yourWishlist')->render(),
                 'msg' => 'The Item Remove Form Cart',
             ]);
         }

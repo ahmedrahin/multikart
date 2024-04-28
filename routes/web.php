@@ -95,8 +95,8 @@ Route::get('/my-profile', [DashboardController::class, 'user_profile'])->middlew
 Route::get('/order-invoice/{id}', [DashboardController::class, 'order_invoice'])->middleware(['auth', 'verified'])->name('order-invoice');
 Route::put('/personal-details-update/{id}', [DashboardController::class, 'userInfo'])->name('personal-details-update');
 Route::put('/shipping-details-update/{id}', [DashboardController::class, 'shippingInfo'])->name('shipping-details-update');
-Route::put('/profile-image-update/{id}', [DashboardController::class, 'profilePic'])->name('profile-image-update');
-Route::patch('/profile-image-remove/{id}', [DashboardController::class, 'removeProfilePic'])->name('profile-image-remove');
+Route::put('/user-profile-image-update/{id}', [DashboardController::class, 'profilePic'])->name('user-profile-image-update');
+Route::delete('/user-profile-image-remove/{id}', [DashboardController::class, 'removeProfilePic'])->name('user-profile-image-remove');
 Route::get('/forget-password', [DashboardController::class, 'forget_password'])->name('forget-password');
 Route::delete('/delete-account/{id}', [DashboardController::class, 'profileDestroy'])->name('profile-destroy');
 Route::patch('/deactive-account/{id}', [DashboardController::class, 'deactiveAccount'])->name('deactive-account');
@@ -113,6 +113,7 @@ Route::group(['prefix' => 'message'], function () {
 // customer reviews
 Route::group(['prefix' => 'customer-review'], function () {
     Route::post('/store', [ReviewController::class, 'store'])->name('review-store');
+    Route::delete('/delete/{id}', [ReviewController::class, 'destroy'])->name('review-delete');
 });
 
 //invalid url

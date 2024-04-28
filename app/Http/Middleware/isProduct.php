@@ -19,7 +19,7 @@ class isProduct
         $slug = $request->route('slug'); 
         $product = Product::where('slug', $slug)->first();
 
-        if (!$product || $product->status !== 1) {
+        if (!$product || $product->status != 1) {
             return redirect()->route('all-products');
         }
 

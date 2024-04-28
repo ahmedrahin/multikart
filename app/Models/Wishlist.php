@@ -40,9 +40,9 @@ class Wishlist extends Model
     //how many product in the wishlist
     public static function totalPsc(){
         if( Auth::check() ){
-            $wishlists = Wishlist::where('user_id', Auth::id())->get();
+            $wishlists = Wishlist::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
         }else {
-            $wishlists = Wishlist::where('ip_address', request()->ip())->get();
+            $wishlists = Wishlist::where('ip_address', request()->ip())->orderBy('created_at', 'desc')->get();
         }
         return $wishlists;
     }

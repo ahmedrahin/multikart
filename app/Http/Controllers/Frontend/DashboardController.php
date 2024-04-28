@@ -80,12 +80,10 @@ class DashboardController extends Controller
             $userInfo->email = $request->email;
             $userInfo->phone = $request->phone;
 
-            // Notification
-            Toastr::success('Your Information is Updated', '', ["positionClass" => "toast-top-right", "closeButton" => true]);
+            // save
             $userInfo->save();
-            return redirect()->route('user-profile');
-        }
 
+        }
     }
     
     /**
@@ -104,10 +102,8 @@ class DashboardController extends Controller
             $shippingInfo->division_id   = $request->division_id;
             $shippingInfo->district_id   = $request->district_id;
 
-            // Notification
-            Toastr::success('Shipping Information Updated', '', ["positionClass" => "toast-top-right", "closeButton" => true]);
-            $shippingInfo->save();
-            return redirect()->route('user-profile');
+            // save
+            $shippingInfo->save();;
         }
 
     }
@@ -120,6 +116,9 @@ class DashboardController extends Controller
         $userImg = User::find($id);
         $request->validate([
             'image' => 'required|mimes:jpeg,png,jpg,gif',    
+        ], [
+            'image.required' => 'The image field is required.',
+            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
         ]);
 
         $uploadedImage = $request->file('image');
@@ -139,23 +138,27 @@ class DashboardController extends Controller
             $userImg->image = $imageName;
 
             if ($hadProfilePic) {
-                Toastr::success('Profile Picture is Updated', '', ["positionClass" => "toast-top-right", "closeButton" => true]);
-            } else {
-                Toastr::success('Profile Picture is Uploaded', '', ["positionClass" => "toast-top-right", "closeButton" => true]);
-            }
-        } else {
-            Toastr::error('Profile Picture is Not Uploaded', '', ["positionClass" => "toast-top-right", "closeButton" => true]);
-        }
+                $userImg->save();
 
-        $userImg->save();
-        return redirect()->route('user-profile');
+                return response()->json([
+                    'html' => view('frontend.includes.profile-img')->render(),
+                    'msg' => 'Profile Picture is Updated',
+                ]);
+            } else {
+                $userImg->save();
+                return response()->json([
+                    'html' => view('frontend.includes.profile-img')->render(),
+                    'msg' => 'Profile Picture is Uploaded',
+                ]);
+            }
+        } 
     }
 
     /**
      * Remove the user profile picture.
      */
-    public function removeProfilePic(Request $request, string $id){
-
+    public function removeProfilePic(Request $request, string $id)
+    {
         $remove_img = User::find($id);
 
         if (!is_null($remove_img)) {
@@ -170,10 +173,12 @@ class DashboardController extends Controller
                 // Remove the image reference from the database
                 $remove_img->image = null;
 
-                // Notification
-                Toastr::error('Profile Picture is Removed', '', ["positionClass" => "toast-top-right", "closeButton" => true]);
+                // save
                 $remove_img->save();
-                return redirect()->back();
+                return response()->json([
+                    'html' => view('frontend.includes.profile-img')->render(),
+                    'msg' => 'Profile Picture is Deleted',
+                ]);
             }
         }
     }

@@ -5,7 +5,24 @@
 @endsection
 
 @section('page-css')
-    
+    <style>
+        #top-review{
+            position: relative;
+        }
+        #top-review .delReview {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+        #top-review .delReview button  {
+        border: none;
+        background: transparent;
+        }
+        #top-review .delReview button i  {
+            color: #ff0000c7;
+            font-size: 22px;
+        }
+    </style>
 @endsection
 
 @section('body-content')
@@ -567,258 +584,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="top-reviews-item" role="tabpanel" aria-labelledby="review-top-tab">
-                            <div id="top-review">
-                                @if( Auth::check() )
-                                    @php
-                                        $product_review = App\Models\Review::where('product_id', $product_detail->id)->where('user_id', Auth::user()->id)->first();
-                                    @endphp
-                                    @if( !(isset($product_review)) )
-                                        <form action="{{ route('review-store') }}" method="post" class="theme-form" name="reviewForm">
-                                            @csrf
-                                            <h3>Leave a review</h3>
-                                            <div class="form-row row">
-                                                <div class="col-md-12">
-                                                    <div class="media mb-1">
-                                                        <label>Rating:</label>
-                                                        <div class="media-body ms-3">
-                                                            <fieldset class="rating">
-                                                                <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="5 stars"></label>
-                                                                <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="4.5 stars"></label>
-                                                                <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="4 stars"></label>
-                                                                <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="3.5 stars"></label>
-                                                                <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="3 stars"></label>
-                                                                <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="2.5 stars"></label>
-                                                                <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="2 stars"></label>
-                                                                <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="1.5 stars"></label>
-                                                                <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="1 star"></label>
-                                                                <input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf" title="0.5 stars"></label>
-                                                                <input type="radio" class="reset-option" name="rating" value="reset" />
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <label for="review">Write Review:</label>
-                                                    <textarea class="form-control" placeholder="Wrire Your Testimonial Here.."
-                                                        id="review" name="review" rows="6"></textarea>
-                                                        @error('review')
-                                                            <div class="text-danger">{{$message}}</div>
-                                                        @enderror
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <input type="hidden" name="productId" value="{{ $product_detail->id }}">
-                                                    <button class="btn btn-solid" name="submit" type="submit">
-                                                        Submit YOur Review
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    @else
-                                        <div class="user-review">
-                                            <h4>You already submited your review for this product</h4>
-                                            <p>Your Rating: 
-                                                @if( $product_review->rating == 5 )
-                                                    <div class="rating fiveStar">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 4.5 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 4 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 3.5 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 3 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 2.5 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 2 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 1.5 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 1 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                    </div>
-                                                @elseif( $product_review->rating == 0.5 )
-                                                    <div class="rating">
-                                                        <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                        <i class="fa fa-star norating"></i>
-                                                    </div>
-                                                @endif
-                                                {{ $product_review->rating }} Star
-                                            </p>
-                                            <div></div>
-                                            <p>
-                                                Your Review:
-                                            </p>
-                                            <span>{{ $product_review->review }}</span>
-                                        </div>
-                                    @endif
-                                @else
-                                    <div class="alert alert-warning">
-                                        You must be login before review! <a href="{{ route('login') }}">Please Login.</a>
-                                    </div>
-                                @endif
-                            </div>
-                            {{-- previous review --}}
-                            @if( $reviews->count() != 0 )
-                                <div class="customer-review">
-                                    <h3>Customer's Reviews</h3>
-                                    @foreach( $reviews as $review )
-                                        <div class="allReview">
-                                            <ul>
-                                                <li>
-                                                    @if( !is_null($review->user->image) )
-                                                        <img src="{{ asset('uploads/user/' . $review->user->image) }}" alt="">
-                                                    @else
-                                                        <img src="{{ asset('uploads/images/default.jpg') }}" alt="">
-                                                    @endif
-                                                </li>
-                                                <li class="messageItem">
-                                                    <span>{{ $review->user->name }}</span>
-                                                    <p>{{ $review->review }}</p>
-                                                    @if( $review->rating == 5 )
-                                                        <div class="rating fiveStar">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 4.5 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 4 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 3.5 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 3 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 2.5 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 2 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 1.5 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 1 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                        </div>
-                                                    @elseif( $review->rating == 0.5 )
-                                                        <div class="rating">
-                                                            <i class="fa fa-star-half-o noteqaul" aria-hidden="true"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                            <i class="fa fa-star norating"></i>
-                                                        </div>
-                                                    @endif
-                                                </li>
-                                            </ul>
-                                            
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                            @endif
+                            @include('frontend.includes.review')
                         </div>
                     </div>
                 </div>
@@ -1055,39 +821,32 @@
                                         @endif
                                     
                                     </div>
-                                        <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm">
-                                            @csrf
-                                            <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
-                                            <input type="hidden" name="productId" value="{{$product->id}}">
-                                            {{-- product attribute --}}
-                                            
-                                            
-                                            @if( ($product->ProductAttribute->count() > 0) )
-                                                <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
-                                                    <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                    Select Option
-                                                </a>
+                                        
+                                    <form action="{{ route('add-to-cart') }}" method="POST" name="cartForm" class="cartForm">
+                                        @csrf
+                                        <input type="hidden" name="quantity" value="{{ ($product->quantity == 0) ? '0' : '1' }}">
+                                        <input type="hidden" name="productId" value="{{$product->id}}">
+
+                                        {{-- product attribute --}}
+                                        @if(($product->ProductAttribute->count() > 0))
+                                            <a href="{{ route('product-details', $product->slug) }}" class="btn btn-solid hover-solid btn-animation btnAddto">
+                                                <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                Select Option
+                                            </a>
+                                        @else
+                                            @if($product->quantity != 0)
+                                                <button class="btn btn-solid hover-solid btn-animation btnAddto btnAddtoCart" type="button">
+                                                    <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i>
+                                                    Add to cart
+                                                </button>
                                             @else
-                                                @if( $product->quantity != 0 )
-                                                    @if( App\Models\Cart::totalItems()->where('product_id', $product->id)->count() == 0 )
-                                                        <button id="cartEffect" class="btn btn-solid hover-solid btn-animation btnAddto" type="submit">
-                                                            <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> 
-                                                            Add to cart
-                                                        </button>
-                                                    @else
-                                                        <a href="{{ route('cart-manage') }}" class="btn btn-solid hover-solid btnAddto ExistCart">
-                                                            <i class="fa fa-eye text-theme" style="color: #fff !important"></i>
-                                                            Exist Your Cart
-                                                        </a>
-                                                    @endif
-                                                @else
-                                                    <button class="btn btn-solid hover-solid btnAddto notAvailble">
-                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                        Not Available!
-                                                    </button>
-                                                @endif
+                                                <button class="btn btn-solid hover-solid btnAddto notAvailble">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                    Not Available!
+                                                </button>
                                             @endif
-                                        </form>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -1311,24 +1070,94 @@
 
     </script>
 
+
     @if( Auth::check() )
         {{-- validation review --}}
         <script>
-            let reviewForm = document.forms['reviewForm'];
-            reviewForm['submit'].addEventListener('click', (e) => {
-                if( reviewForm['review'].value == '' ){
-                    e.preventDefault();
-                    toastr.error('Wrire Your Testimonial', '', {"positionClass": "toast-top-right", "closeButton": true});
-                    reviewForm['review'].style.border = "2px solid #ff0000c7";
+           function reviewValidation(){
+                let reviewForm = document.forms['reviewForm'];
+                reviewForm['submit'].addEventListener('click', (e) => {
+                    if( reviewForm['review'].value == '' ){
+                        e.preventDefault();
+                        toastr.error('Wrire Your Testimonial', '', {"positionClass": "toast-top-right", "closeButton": true});
+                        reviewForm['review'].style.border = "2px solid #ff0000c7";
+                    }
+                    else if( reviewForm['rating'].value == '' ){
+                        e.preventDefault();
+                        toastr.error('Please Select an Rating', '', {"positionClass": "toast-top-right", "closeButton": true});
+                    }else if( reviewForm['review'].value != '' ) {
+                        toastr.clear();
+                        reviewForm['review'].style.border = "none";
+                    }
+                })
+           }
+           reviewValidation();
+        </script>
+
+         {{-- submit review --}}
+        <script>
+           
+           $(document).ready(function() {
+                // Function to handle form submission
+                function handleFormSubmission() {
+                    $('form[name="reviewForm"]').submit(function(event) {
+                        // Prevent default form submission
+                        event.preventDefault();
+
+                        // Serialize form data
+                        var formData = $(this).serialize();
+
+                        // Send AJAX request
+                        $.ajax({
+                            type: 'POST',
+                            url: $(this).attr('action'),
+                            data: formData,
+                            beforeSend: function() {
+                                $('#submitReview').prop('disabled', true).html(`
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                `);
+                                $('#submitReview').css('width', '231px');
+                            },
+                            success: function(response) {
+                                // Handle success response here
+                                $('#submitReview').prop('disabled', false).html('Submit Your Review');
+                                toastr.success(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                                $('#top-reviews-item').html(response.html);
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error here
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
                 }
-                else if( reviewForm['rating'].value == '' ){
+
+                // Call the function to handle form submission
+                handleFormSubmission();
+
+                // Script to handle review deletion
+                $(document).on('click', '#deleteReview', function(e) {
                     e.preventDefault();
-                    toastr.error('Please Select an Rating', '', {"positionClass": "toast-top-right", "closeButton": true});
-                }else if( reviewForm['review'].value != '' ) {
-                    toastr.clear();
-                    reviewForm['review'].style.border = "none";
-                }
-            })
+                    let form = $(this).closest('form');
+                    $.ajax({
+                        type: 'DELETE',
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function(response) {
+                            toastr.info(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                            $('#top-reviews-item').html(response.html);
+                            // No need to rebind form submission event here
+                            handleFormSubmission();
+                            reviewValidation()
+                        },
+                        error: function(xhr, status, error) {
+                            toastr.error('Error deleting review. Please try again later.');
+                        }
+                    });
+                });
+            });
+
         </script>
     @endif
+    
 @endsection

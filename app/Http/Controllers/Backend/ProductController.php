@@ -126,12 +126,16 @@ class ProductController extends Controller
 
                 ->addColumn('message',function($data){
                     $review = $data->review;
-                    // Limit the length of the review to 45 characters
+    
+                    // Limit the length of the review to 85 characters
                     if (strlen($review) > 85) {
                         $review = substr($review, 0, 85) . '...';
                     }
+                    
                     // Capitalize the first letter of the review
                     $review = ucfirst($review);
+                    
+                    // Return the formatted review message wrapped in HTML
                     return '<p class="msg-info">' . $review . '</p>';
                 })
 
@@ -143,10 +147,10 @@ class ProductController extends Controller
                     return '<a class="btn btn-primary br-0" target="_blank" href="' . route('product-detail', $data->product->id) . '">
                                 <i class="bi bi-eye"></i>
                             </a>' .
-                            '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#product' . $data->product->id . '"><span class="cancell">&#10060</span></button>' ;
+                            '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#review' . $data->id . '"><span class="cancell">&#10060</span></button>' ;
                 })
                 
-                ->rawColumns(['sl', 'product_title', 'email', 'message', 'action'])
+                ->rawColumns(['sl', 'product_title', 'email', 'message', 'rating', 'action'])
                 ->make(true);
             }
 

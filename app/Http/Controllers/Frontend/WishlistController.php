@@ -157,6 +157,7 @@ class WishlistController extends Controller
         return response()->json([
             'html' => view('frontend.includes.wishlistItem')->render(),
             'delWc' => view('frontend.includes.wishlistDetails')->render(),
+            'yourWc' => view('frontend.pages.customer-pages.yourWishlist')->render(),
             'msg' => 'The Item Remove From Wishlist',
         ]);
     }

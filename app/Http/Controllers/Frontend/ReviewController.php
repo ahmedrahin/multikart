@@ -33,11 +33,16 @@ class ReviewController extends Controller
         $review->product_id = $request->productId;
         $review->review     = $request->review;
         $review->rating     = $request->rating;
-
-        session::flash('alert-type', 'success');
-        session::flash('message', 'Thank You for submited your review');
         $review->save();
-        return redirect()->back();
+
+        // product id
+        $product_detail = Product::find($review->product_id);
+        // review
+        $reviews = Review::orderBy('id', 'desc')->where('product_id', $review->product_id)->get();
+        return response()->json([
+            'html' => view('frontend.includes.review', compact('product_detail', 'reviews'))->render(),
+            'msg' => 'Thank You for submited your review',
+        ]);
     }
 
     /**
@@ -45,6 +50,18 @@ class ReviewController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $delete = Review::find($id);
+        if( !is_null($delete) ){
+            $delete->delete();
+
+            // product id
+            $product_detail = Product::find($delete->product_id);
+            // review
+            $reviews = Review::orderBy('id', 'desc')->where('product_id', $delete->product_id)->get();
+            return response()->json([
+                'html' => view('frontend.includes.review', compact('product_detail', 'reviews'))->render(),
+                'msg' => 'Your review is deleted',
+            ]);
+        }
     }
 }

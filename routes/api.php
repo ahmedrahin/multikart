@@ -43,6 +43,7 @@ Route::get('get-images/{id}', function($id){
 
 // searh box api
 Route::get('search-product', [ProductpagesController::class, 'ajaxsearchProduct']);
+
 // cart item
 Route::get('get-cart/{id}', function($id){
     return json_encode(App\Models\Cart::where('id', $id)->get());

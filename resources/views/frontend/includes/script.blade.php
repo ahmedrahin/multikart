@@ -422,6 +422,9 @@
                     } else if( currentUrl.includes('wishlists') ){
                         $('.wishlistBody').html(response.delWc)
                     }
+                    else if( currentUrl.includes('my-dashboard') ){
+                        $('#yourWishlist').html(response.yourWc)
+                    }
                 }
             })
         }
@@ -521,6 +524,15 @@
                     $(document).on('click', '.btnAddWs', function() {
                         addWishlist($(this));
                     });
+                    
+                    // validation
+                    $(document).on('click', '.notAdd', function() {
+                        toastr.info('The product is not available! <br> Check Back Later.', '', {"positionClass": "toast-top-right", "closeButton": true});
+                    });
+
+                    $(document).on('click', '.existCart', function() {
+                        toastr.info('The product is exsit in your cart', '', {"positionClass": "toast-top-right", "closeButton": true});
+                    });
 
                      //redirect to all-product-page if wishlist item is null
                     var wcqunt = parseInt($('.wcqunt').val());
@@ -535,6 +547,8 @@
                             $(".wishlistLists .loader").css('z-index', '-1');
                             $(".wishlistLists .loader").css('visibility', 'hidden');
                         }
+                    }else if( currentUrl.includes('my-dashboard') ){
+                        $('#yourWishlist').html(response.yourWc)
                     }
                 }
             })

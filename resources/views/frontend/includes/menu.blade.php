@@ -91,10 +91,10 @@
     </div>
     <div>
         <div class="search_box">
-            <form action="/search" method="GET" class="form_search" role="form">
-                
+            <form action="{{ route('search-product') }}"  class="form_search" role="form">
+                @csrf
                 <input type="search" name="term" id="searchInput" placeholder="Search for products...">
-                <button type="submit" class="btn-search">
+                <button type="submit" name="nav-submit-button" class="btn-search">
                     <i class="ti-search"></i>
                 </button>
             </form>

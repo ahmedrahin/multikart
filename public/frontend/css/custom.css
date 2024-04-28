@@ -336,11 +336,19 @@ i.pageiconRotate{
 	z-index: 3;
 	cursor: pointer;
 }
-.profile-pic input[type="submit"]{
+#upProPic, #updateProPic{
     margin-top: 30px;
     border-radius: 2px;
-    padding: 12px 20px;
+    padding: 13px 20px;
     font-size: 13px;
+    position: inherit;
+    width: inherit;
+    height: inherit;
+    margin-left: 6px;
+}
+#upProPic:hover, #updateProPic:hover {
+    background-color: #ff4c3b !important;
+    color: #fff !important;
 }
 .modal .profile-pic {
     margin-bottom: 40px;
@@ -1193,8 +1201,9 @@ select {
 .loader{
     position: absolute;
     top: 0;
-    width: 100%;
+    width: 98%;
     height: 100%;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -45,11 +45,11 @@
             $matchingCartItem = App\Models\Cart::totalItems()->where('product_id', $wishlist->product_id)->where('user_id', $wishlist->user_id)->where('ip_address', $wishlist->ip_address)->first();
         @endphp
         @if( $wishlist->product->status != 1 || $wishlist->product->quantity == 0 )
-            <button class="btn btn-xs btn-solid" id="notAdd">
+            <button class="btn btn-xs btn-solid notAdd">
                 Move to Cart
             </button>
         @elseif( isset($matchingCartItem) && $wishlist->product_id == $matchingCartItem->product_id )
-            <button class="btn btn-xs btn-solid" id="existCart">
+            <button class="btn btn-xs btn-solid existCart">
                 Move to Cart
             </button>
         @else

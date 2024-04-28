@@ -75,23 +75,26 @@
 @endsection
 
 @section('page-script')
+    {{-- validation --}}
     <script>
-         let notAdd    = document.getElementById('notAdd');
-         let existCart = document.getElementById('existCart');
-         if( notAdd ){
-            notAdd.onclick = (e) => {
-            e.preventDefault();
-            toastr.info('The product is not available! <br> Check Back Later.', '', {"positionClass": "toast-top-right", "closeButton": true});
-            }
-         }
-        
-        if( existCart ){
-            existCart.addEventListener('click', function(e){
-            e.preventDefault();
-            toastr.info('The product is exsit in your cart', '', {"positionClass": "toast-top-right", "closeButton": true});
-          })
+        let notAdd = document.querySelectorAll('.notAdd');
+        let existCart = document.querySelectorAll('.existCart');
+
+        if (notAdd) {
+            notAdd.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    toastr.info('The product is not available! <br> Check Back Later.', '', {"positionClass": "toast-top-right", "closeButton": true});
+                });
+            });
         }
-        
+
+        if (existCart) {
+            existCart.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    toastr.info('The product is exsit in your cart', '', {"positionClass": "toast-top-right", "closeButton": true});
+                });
+            });
+        }
     </script>
 
     {{-- move wishlist to cart --}}
@@ -125,6 +128,15 @@
                         $("#wishlistItemsAll .loader").css('z-index', '-1');
                         $("#wishlistItemsAll .loader").css('visibility', 'hidden');
 
+                        // validation
+                        $(document).on('click', '.notAdd', function() {
+                            toastr.info('The product is not available! <br> Check Back Later.', '', {"positionClass": "toast-top-right", "closeButton": true});
+                        });
+
+                        $(document).on('click', '.existCart', function() {
+                            toastr.info('The product is exsit in your cart', '', {"positionClass": "toast-top-right", "closeButton": true});
+                        });
+
                         //redirect to all-product-page if wishlist item is null
                         var wcqunt = parseInt($('.wcqunt').val());
                         var currentUrl = window.location.href;
@@ -143,5 +155,6 @@
                 });
             });
         });
+
     </script>
 @endsection

@@ -67,11 +67,11 @@
                 $matchingCartItem = App\Models\Cart::totalItems()->where('product_id', $wishlist->product_id)->where('user_id', $wishlist->user_id)->where('ip_address', $wishlist->ip_address)->first();
             @endphp
             @if( $wishlist->product->status != 1 || $wishlist->product->quantity == 0 )
-                <button class="deleteWc" id="notAdd">
+                <button class="deleteWc notAdd">
                     <i class="ti-shopping-cart"></i>
                 </button>
             @elseif( isset($matchingCartItem) && $wishlist->product_id == $matchingCartItem->product_id )
-                <button class="deleteWc" id="existCart">
+                <button class="deleteWc existCart">
                     <i class="ti-shopping-cart"></i>
                 </button>
             @else

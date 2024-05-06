@@ -190,7 +190,7 @@
     {!! Toastr::message() !!}
    
     {{-- password validation --}}
-    {{-- <script>
+    <!-- <script>
         let passwordForm = document.forms['passwordForm'];
         passwordForm['submit'].addEventListener('click', function(e){
             if( passwordForm['current_password'].value == '' ){
@@ -202,7 +202,7 @@
                 passwordForm.reset();
             }
         })
-    </script> --}}
+    </script> -->
 
     {{-- country state district --}}
     <script>
@@ -500,6 +500,7 @@
     @if( Auth::check() )
         @if( !is_null(Auth::user()->image) )
             <script>
+
                 function upProfileValidation(){
                     const img              = document.getElementById('upImg');
                     const input            = document.querySelector(".image-upload");
@@ -592,7 +593,7 @@
                     }) 
                 }
                 
-                upProfileValidation()
+                upProfileValidation();
 
                 //update profile
                 $(document).on('click', '#upProPic', function() {
@@ -622,6 +623,7 @@
                             
                             $('.modal-backdrop.show').css('visibility', 'hidden');
                             $('.modal-backdrop.show').css('opacity', 0);
+                            delImg()
                         },
                         error: function(){
                             $("#upProPic").prop('disabled', false).html(`Update Profile`);
@@ -639,6 +641,36 @@
                         }
                     });
                 });
+
+                // delete profile
+                function delImg(){
+                    $('.delProfilePic').click(function() {
+                        var $form = $(this).closest('.delProfilePicForm');
+                        var $button = $(this);
+                        var formData = $form.serialize();
+
+                        $.ajax({
+                            type: 'DELETE',
+                            url: $form.attr('action'),
+                            data: formData,
+                            beforeSend : function()
+                            {
+                            
+                            },
+                            success: function(response) {
+                                toastr.success(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                                $('.profile-image').html(response.html);
+
+                                $('.modal-backdrop.show').css('visibility', 'hidden');
+                                $('.modal-backdrop.show').css('opacity', 0);
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                            console.log(errorThrown)
+                            }
+                        });
+                    });
+                }
+                 delImg()
 
             </script>
         @else
@@ -709,9 +741,9 @@
                 profileValidation();
         
                 //upload profile
-                $(document).on('click', '#upProPic', function() {
+                $('#upProPic').off().click(function() {
                     var $form = $(this).closest('.profileImageUpload');
-                    var formData = new FormData($form[0]); // Use FormData for file uploads
+                    var formData = new FormData($form[0]);
         
                     $.ajax({
                         type: 'POST', // Corrected to 'PUT'
@@ -737,15 +769,7 @@
                             
                             $('.modal-backdrop.show').css('visibility', 'hidden');
                             $('.modal-backdrop.show').css('opacity', 0);
-
-                            // $('#hoyja').load('path/to/my-profile #hoyja', function(response, status, xhr) {
-                            //     if (status == "error") {
-                            //         var msg = "Sorry but there was an error: ";
-                            //         console.log(msg + xhr.status + " " + xhr.statusText);
-                            //     } else {
-                            //         // Content loaded successfully, perform actions here
-                            //     }
-                            // });
+                            
                         },
 
                         error: function(){
@@ -755,40 +779,13 @@
                         }
                     });
                 });
-        
+
             </script>
         @endif
     @endif
             
     <script>
-        // delete profile
-        $(document).ready(function() {
-            $('.delProfilePic').click(function() {
-            var $form = $(this).closest('.delProfilePicForm');
-            var $button = $(this);
-            var formData = $form.serialize();
 
-                $.ajax({
-                    type: 'DELETE',
-                    url: $form.attr('action'),
-                    data: formData,
-                    beforeSend : function()
-                    {
-                       
-                    },
-                    success: function(response) {
-                        toastr.success(response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
-                        $('.profile-image').html(response.html);
-
-                        $('.modal-backdrop.show').css('visibility', 'hidden');
-                        $('.modal-backdrop.show').css('opacity', 0);
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                       console.log(errorThrown)
-                    }
-                });
-            });
-        });
     </script>
     
 @endsection

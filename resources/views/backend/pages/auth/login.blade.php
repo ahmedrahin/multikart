@@ -23,11 +23,29 @@
 	<link href="{{ asset('backend/css/icons.css') }}" rel="stylesheet">
 	<style>
 		.bg-login {
-			background-image: none;
+			background-image: url("{{asset('backend/images/lo.jpg')}}");
 			background-color: #f6f6f6;
+			position: relative;
+		}
+		.bg-login::before{
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			background-color: #000;
+			opacity: .60;
 		}
 		.bg-login .card-body{
-			box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+			box-shadow: 0;
+			box-shadow: none;
+		}
+		.card.shadow-none{
+			background: #59595936;
+		}
+		label {
+			color: #ffffffb0;
 		}
 		input {
 			display: block;
@@ -38,6 +56,19 @@
 			font-size: 13px;
 			font-weight: 500;
 			margin-bottom: -10px;
+		}
+		h3 {
+			color: white;
+		}
+		.bx-hide, .bx-show{
+			color: white;
+		}
+		p.mb-0 {
+			color: #ffffff99;
+		}
+		input:focus {
+			box-shadow: 0;
+			box-shadow: none !important;
 		}
 	</style>
 	

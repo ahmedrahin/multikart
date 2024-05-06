@@ -6,7 +6,7 @@
 
 @section('page-css')
     <link rel="stylesheet" href="{{ asset('backend/css/custom.css') }}" />
-    <link rel="stylesheet" href="{{ asset('frontend/fonts/icon.all.min.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('frontend/fonts/icon.all.min.css') }}"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .UpdateUser {
@@ -82,10 +82,10 @@
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                                    <i class="fas fa-window-close"></i>
+                                                                   <i class="fa fa-window-close" aria-hidden="true"></i>
                                                                 </button>
                                                                 <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                                    Select Profile Picture
+                                                                    Update Profile Picture
                                                                 </h1>
                                                                 </div>
                             
@@ -132,7 +132,7 @@
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                                    <i class="fas fa-window-close"></i>
+                                                                    <i class="fa fa-window-close" aria-hidden="true"></i>
                                                                 </button>
                                                                 <h1 class="modal-title fs-5" id="exampleModalLabel">
                                                                     Select Profile Picture

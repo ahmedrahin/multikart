@@ -101,6 +101,23 @@ class ShippingController extends Controller
         }
     }
 
+    // active status
+    public function active_status(Request $request, string $id)
+    {   
+        // update id
+        $update = Shipping::find($id);
+        $update->status = $request->status;
+        // save
+        $update->save();
+
+        $message = $request->status == 2 ? 'Shipping status is off' : 'Shipping status is on';
+        $type    = $request->status == 2 ? 'info' : 'success';
+        return response()->json([
+            'msg' => $message,
+            'type' => $type,
+        ], 200);
+    }
+
     /**
      * Remove the specified resource from storage.
      */

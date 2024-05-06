@@ -30,6 +30,7 @@ use App\Http\Controllers\Backend\GenarelSettings;
 use App\Http\Controllers\Backend\ProductVariationController;
 use App\Http\Controllers\Backend\VariationValueController;
 use App\Http\Controllers\Backend\CuponController;
+use App\Http\Controllers\Backend\ReportController;
 
 // Payment Controller
 use App\Http\Controllers\Payment\SslCommerzPaymentController;
@@ -116,10 +117,6 @@ Route::group(['prefix' => 'customer-review'], function () {
     Route::delete('/delete/{id}', [ReviewController::class, 'destroy'])->name('review-delete');
 });
 
-//invalid url
-Route::fallback(function () {
-    return view('frontend.pages.404');
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -127,6 +124,11 @@ Route::fallback(function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function () {
+
+    //invalid url
+    Route::fallback(function () {
+        return view('backend.pages.404');
+    });
 
     // All Admin
     Route::controller(AdminController::class)->group(function () {
@@ -209,7 +211,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function () {
         Route::post('/restore/{id}', [ProductController::class, 'restore'])->name('restore-product');
         Route::post('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy-product');
         Route::get('/featured-product', [ProductController::class, 'featured_product'])->name('featured-product');
-        Route::get('/product-detail/{id}', [ProductController::class, 'product_detail'])->name('product-detail');
+        Route::get('/product-detail/{slug}', [ProductController::class, 'product_detail'])->name('product-detail');
         Route::get('/product-review', [ProductController::class, 'Reviewmanage'])->name('review-manage');
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy-review');
         Route::post('/update-feature-status/{id}', [ProductController::class, 'update_feature'])->name('update-feature-status');
@@ -285,6 +287,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function () {
         Route::post('/update/{id}', [ShippingController::class, 'update'])->name('shipping-update');
         Route::post('curiour/update/{id}', [ShippingController::class, 'curiourUpdate'])->name('curiour-update');
         Route::delete('/destroy/{id}', [ShippingController::class, 'destroy'])->name('destroy-shipping');
+        Route::put('/shipping-status/{id}', [ShippingController::class, 'active_status'])->name('status-shipping');
     });
 
     // currency 
@@ -316,9 +319,24 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function () {
         Route::delete('/destroy/{id}', [CuponController::class, 'destroy'])->name('destroy-cupons');
     });
 
+    // reports
+     Route::controller(ReportController::class)->group(function () {
+        Route::group(['prefix' => 'reports'], function () {
+            Route::get('selling-reports', 'show')->name('selling-reports');
+            Route::post('filter-by-date', 'filterByDate')->name('filter-by-date');
+        });
+    });
+
+
     // wishlist
     Route::get('/wishlist-list', [WishlistController::class, 'wishlistList'])->name('wishlistList');
 });
+
+ //invalid url
+ Route::fallback(function () {
+    return view('frontend.pages.404');
+});
+
 
 /*
 |--------------------------------------------------------------------------

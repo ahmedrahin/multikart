@@ -299,7 +299,7 @@
 					</a>
 					<ul>
 						<li>
-							 <a href="app-emailbox.html"><i class="bx bx-right-arrow-alt"></i>Selling Reports</a>
+							 <a href="{{route('selling-reports')}}"><i class="bx bx-right-arrow-alt"></i>Selling Reports</a>
 						</li>
 						<li>
 							 <a href="app-emailbox.html"><i class="bx bx-right-arrow-alt"></i>Product Reports</a>

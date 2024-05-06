@@ -88,7 +88,7 @@ class ProductController extends Controller
                     }
                 })
                 ->addColumn('action', function($data) {
-                    return '<a class="btn btn-warning br-0" target="_blank" href="' . route('product-detail', $data->id) . '">
+                    return '<a class="btn btn-warning br-0" target="_blank" href="' . route('product-detail', $data->slug) . '">
                                 <i class="bi bi-eye"></i>
                             </a>' .
                             '<a class="btn btn-primary br-0" href="' . route('edit-product', $data->id) . '">
@@ -803,10 +803,10 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function product_detail(string $id)
+    public function product_detail(string $slug)
     {   
-        $product_detail = Product::where('id', $id)->first();
-        $reviews        = Review::where('product_id', $id)->get();   
+        $product_detail = Product::where('slug', $slug)->first();
+        $reviews        = Review::where('product_id', $product_detail->id)->get();   
         return view('backend.pages.product.details', compact('product_detail', 'reviews'));
     }
 

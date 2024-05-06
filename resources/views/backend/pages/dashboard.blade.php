@@ -451,7 +451,7 @@
                                     @php
                                         $product = App\Models\Product::find($item->product_id);
                                     @endphp
-                                    <a href="{{ route('product-detail', $product->id) }}">
+                                    <a href="{{ route('product-detail', $product->slug) }}">
                                         <div class="d-flex align-items-center justify-content-between gap-3 p-2 border radius-10">
                                             <div class="">
                                                 @if( !is_null($product->thumb_image) )
@@ -616,7 +616,7 @@
                     @if($product_reviews->count() != 0)
                         @foreach( $product_reviews as $product_review )
                             <li class="list-group-item bg-transparent">
-                                <a href="{{ route('product-detail', $product_review->product->id) }}">
+                                <a href="{{ route('product-detail', $product_review->product->slug) }}">
                                     <div class="d-flex align-items-center">
                                         @if( $product_review->product->thumb_image )
                                             <img src="{{ asset("uploads/product/thumb_image/" . $product_review->product->thumb_image) }}" alt="user avatar" class="rounded-circle" width="55" height="55">

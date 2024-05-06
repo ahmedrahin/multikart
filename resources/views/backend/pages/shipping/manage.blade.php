@@ -9,6 +9,25 @@
     {{-- <link rel="stylesheet" href="{{ asset('backend/css/table.css') }}"/> --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+       input[type="checkbox"] {
+            width: 40px !important;
+            height: 16px;
+            padding: 0;
+        }
+        .form-check-input:checked {
+            background-color: #0d6efd !important;
+            border-color: #0d6efd !important;
+        }
+        .form-check-input:focus {
+            box-shadow: none;
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 @endsection
 
 @section('body-content')
@@ -67,11 +86,17 @@
                                             <td>{{ $base_shipping_item->base_charge }}</td>
                                             <td>
                                                 @if( $base_shipping_item->status == 1 )
-                                                    <div class="badge bg-success">Active</div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input status-toggle" type="checkbox" data-shipping-id="{{ $base_shipping_item->id }}" checked>
+                                                    </div>
                                                 @elseif( $base_shipping_item->status == 2 )
-                                                    <div class="badge bg-danger">Inactive</div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input status-toggle" type="checkbox" data-shipping-id="{{ $base_shipping_item->id }}">
+                                                    </div>
                                                 @else 
-                                                    <div class="badge bg-success">Active</div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input status-toggle" type="checkbox" data-shipping-id="{{ $base_shipping_item->id }}" checked>
+                                                    </div>
                                                 @endif
                                             </td>
                                             <td>
@@ -247,11 +272,17 @@
                                             <td>{{ $shippings->provider_charge }}</td>
                                             <td>
                                                 @if( $shippings->status == 1 )
-                                                    <div class="badge bg-success">Active</div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input status-toggle" type="checkbox" data-shipping-id="{{ $shippings->id }}" checked>
+                                                    </div>
                                                 @elseif( $shippings->status == 2 )
-                                                    <div class="badge bg-danger">Inactive</div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input status-toggle" type="checkbox" data-shipping-id="{{ $shippings->id }}">
+                                                    </div>
                                                 @else 
-                                                    <div class="badge bg-success">Active</div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input status-toggle" type="checkbox" data-shipping-id="{{ $shippings->id }}" checked>
+                                                    </div>
                                                 @endif
                                             </td>
                                             <td>
@@ -457,4 +488,35 @@
         } )
 
     </script>
+
+    {{-- active status --}}
+    {{-- change status --}}
+    <script>
+        $(document).ready(function() {
+            $('.status-toggle').change(function() {
+                var id = $(this).data('shipping-id');
+                var status = $(this).prop('checked') ? 1 : 2;
+
+                // Send AJAX request
+                $.ajax({
+                    type: 'PUT',
+                    url: '/admin/shipping-methods/shipping-status/' + id, 
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: status
+                    },
+                    success: function(response) {
+                        if( response )
+                        toastr[response.type](response.msg, '', {"positionClass": "toast-top-right", "closeButton": true});
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error here
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+
 @endsection

@@ -7,6 +7,11 @@
 @section('page-css')
     <link rel="stylesheet" href="{{ asset('backend/css/custom.css') }}" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .col-md-6{
+            margin-top: 3rem !important;
+        }
+    </style>
 @endsection
 
 @section('body-content')

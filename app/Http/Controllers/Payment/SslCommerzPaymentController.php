@@ -159,8 +159,6 @@ class SslCommerzPaymentController extends Controller
                 $product->update(['quantity' => $up_qunt ]);
             }
 
-            
-
              // send mail
             $orderData = [
                 'name'  => $post_data['cus_name'],

@@ -40,6 +40,7 @@
                         <h1>404</h1>
                         <h2>page not found</h2>
                         <a href="{{route('homepage')}}" class="btn btn-solid">back to home</a>
+                        <a class="btn btn-solid" onclick="goBack()">go back</a>
                     </div>
                 </div>
             </div>
@@ -48,6 +49,10 @@
     <!-- Section ends -->
 @endsection
 
-@section('script-css')
-    
+@section('page-script')
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 @endsection

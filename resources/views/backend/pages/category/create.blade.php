@@ -7,6 +7,11 @@
 @section('page-css')
     <link rel="stylesheet" href="{{ asset('backend/css/custom.css') }}" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .col-md-6{
+            margin-top: 3rem !important;
+        }
+    </style>
 @endsection
 
 @section('body-content')
@@ -36,7 +41,7 @@
                     <h5 class="heading">Add New Category</h5>
                     </div>
 
-                    <div class=" p-t-5 border p-3 radius-10">
+                    <div class=" border p-3 radius-10">
                         <!-- Message -->
                         @include('backend.includes.message')
                         <form action="{{ route('store-category') }}" method="POST" enctype="multipart/form-data">

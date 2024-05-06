@@ -28,21 +28,25 @@
                             <a href="{{ route('category-product', $category->slug) }}" class="category-link {{ Request::is('category-product/'. $category->slug) ? 'active' : '' }}">
                                 {{ $category->name }}
                             </a>
+                            
                             @if( $category->allSubcategory->where('status', 1)->count() != 0 )
                                 <i class="fa fa-angle-down {{ Request::is('category-product/'. $category->slug) ? 'pageiconRotate' : '' }}" aria-hidden="true"></i>
                             @endif
                         </h4>
+
                         {{--all subcategory  --}}
                         @if( $category->allSubcategory->where('status', 1)->count() > 0 )
                             <ul class="sub-cat {{ Request::is('category-product/'. $category->slug) ? 'showSubCat' : '' }}">
                             @foreach( $category->allSubcategory()->where('status', 1)->orderBy('name', 'asc')->get() as $subCategory )
                                 <li class="{{ Request::is('category-product/'. $subCategory->slug) ? 'active' : '' }}">
                                     <a href="{{ route('category-product', $subCategory->slug) }}" class="subcategory-link">
+
                                         @if(isset( $subCategory ))
                                             @if( $subCategory->status == 1 )
                                                 {{ $subCategory->name }}
                                             @endif
                                         @endif
+
                                     </a>
                                 </li>
                             @endforeach

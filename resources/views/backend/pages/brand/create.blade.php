@@ -6,6 +6,11 @@
 
 @section('page-css')
     <link rel="stylesheet" href="{{ asset('backend/css/custom.css') }}" />
+    <style>
+        .col-md-6{
+            margin-top: 3rem !important;
+        }
+    </style>
 @endsection
 
 @section('body-content')
@@ -35,7 +40,7 @@
                             <h5 class="heading">Add New Brand</h5>
                         </div>
 
-                        <div class="border p-3 p-t-5 radius-10">
+                        <div class="border p-3 radius-10">
                             <!-- Message -->
                             @include('backend.includes.message')
                             <form action="{{ route('store-brand') }}" method="POST" enctype="multipart/form-data" id="addBrand">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 06, 2024 at 06:55 PM
+-- Generation Time: May 06, 2024 at 01:28 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -77,12 +77,10 @@ INSERT INTO `carts` (`id`, `product_id`, `product_quantity`, `prdtc_unt_pri`, `o
 (483, 69, 1, 1500, 13, 22, '127.0.0.1', '2024-04-02 14:40:55', '2024-04-02 14:41:04'),
 (484, 204, 1, 590, 14, 22, '127.0.0.1', '2024-04-02 14:42:58', '2024-04-02 14:43:26'),
 (485, 61, 1, 2000, 14, 22, '127.0.0.1', '2024-04-02 14:43:12', '2024-04-02 14:43:26'),
-(581, 112, 2, 0, NULL, NULL, '127.0.0.1', '2024-04-05 07:28:55', '2024-04-06 08:16:32'),
-(582, 105, 2, 0, NULL, NULL, '127.0.0.1', '2024-04-05 07:28:56', '2024-04-06 08:15:55'),
-(584, 112, 1, 0, NULL, 38, '127.0.0.1', '2024-04-05 16:53:31', '2024-04-06 08:16:22'),
-(604, 70, 1, 0, NULL, 22, '127.0.0.1', '2024-04-06 12:51:47', '2024-04-06 12:51:47'),
-(605, 40, 1, 0, NULL, 22, '127.0.0.1', '2024-04-06 12:52:11', '2024-04-06 12:52:11'),
-(606, 36, 1, 0, NULL, 22, '127.0.0.1', '2024-04-06 12:52:32', '2024-04-06 12:52:32');
+(683, 70, 1, 0, NULL, NULL, '127.0.0.1', '2024-04-24 21:29:22', '2024-04-24 21:29:22'),
+(692, 201, 1, 1500, 15, 22, '127.0.0.1', '2024-05-03 10:09:39', '2024-05-03 10:09:58'),
+(693, 112, 1, 350, 15, 22, '127.0.0.1', '2024-05-03 10:09:40', '2024-05-03 10:09:58'),
+(694, 1, 1, 1100, 16, 22, '127.0.0.1', '2024-05-03 10:11:10', '2024-05-06 00:19:29');
 
 -- --------------------------------------------------------
 
@@ -412,7 +410,9 @@ CREATE TABLE `orders` (
 INSERT INTO `orders` (`id`, `user_id`, `name`, `email`, `phone`, `addressLine1`, `addressLine2`, `district_id`, `division_id`, `country_id`, `zip_code`, `amount`, `paid_amount`, `discount_amount`, `shipping_method`, `cupon_code`, `status`, `transaction_id`, `currency`, `order_date`, `order_time`, `created_at`, `updated_at`) VALUES
 (12, 22, 'Rahin Ahmed', 'ahmedrahin660@gmail.com', '01887497149', 'Rampur, Sayed Bari', 'Feni', 11, 9, 1, '4567', 590, 0, 0, 50, NULL, 'Pending', '660c6d1746b4a', 'BDT', 'Apr-03-24', '2024-04-02 20:39:51', 'Apr-03-24 02:39 am', NULL),
 (13, 22, 'Rahin Ahmed', 'ahmedrahin660@gmail.com', '01887497149', 'Rampur, Sayed Bari', 'Feni', 11, 9, 1, '4567', 1850, 1850, 0, 50, NULL, 'Pending', '660c6d601e076', 'BDT', 'Apr-03-24', '2024-04-02 20:41:04', 'Apr-03-24 02:41 am', NULL),
-(14, 22, 'Rahin Ahmed', 'ahmedrahin660@gmail.com', '01887497149', 'Rampur, Sayed Bari', 'Feni', 11, 9, 1, '4567', 2590, 0, 0, 50, NULL, 'Pending', '660c6deebda20', 'BDT', 'Apr-03-24', '2024-04-02 20:43:26', 'Apr-03-24 02:43 am', NULL);
+(14, 22, 'Rahin Ahmed', 'ahmedrahin660@gmail.com', '01887497149', 'Rampur, Sayed Bari', 'Feni', 11, 9, 1, '4567', 2590, 0, 0, 50, NULL, 'Pending', '660c6deebda20', 'BDT', 'Apr-03-24', '2024-04-02 20:43:26', 'Apr-03-24 02:43 am', NULL),
+(15, 22, 'Rahin Ahmed', 'ahmedrahin660@gmail.com', '01887497149', 'Rampur, Sayed Bari', 'Feni', 33, 12, 1, '2345', 1850, 0, 0, 90, NULL, 'Pending', '66350c56cf7d9', 'BDT', 'May-03-24', '2024-05-03 16:09:58', 'May-03-24 10:09 pm', NULL),
+(16, 22, 'Rahin Ahmed', 'ahmedrahin660@gmail.com', '01887497149', 'Rampur, Sayed Bari', 'Feni', 33, 12, 1, '2345', 1100, 1100, 0, 90, NULL, 'Pending', '6638767171524', 'BDT', 'May-06-24', '2024-05-06 06:19:29', 'May-06-24 12:19 pm', NULL);
 
 -- --------------------------------------------------------
 
@@ -511,7 +511,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `title`, `slug`, `brand_id`, `category_id`, `subCategory_id`, `regular_price`, `offer_price`, `quantity`, `sku_code`, `short_details`, `long_details`, `video_link`, `is_featured`, `status`, `tags`, `thumb_image`, `back_image`, `created_at`, `updated_at`) VALUES
-(1, 'Elah Panjabi', 'elah-panjabi', 1, 18, 1, 1300, 1100, 8, 'pp11', '<p>Greet your wardrobe with this stylish panjabi! This men&#39;s digital-printed blended cotton item features decorative.</p>', '<p><strong>TWELVE CLOTHING </strong>PUTS A GREAT EFFORT INTO MAKING CLOTHES THAT FIT AND PLEASE EVERY INDIVIDUAL CUSTOMER. WE ONLY MAKE PRODUCTS THAT WE CONSIDER ATTRACTIVE, HIGH QUALITY, CONTEMPORARY, GENUINE AND AFFORDABLE. WE WANT PEOPLE TO LOVE THEIR CLOTHES AND BE CONFIDENT WHILE WEARING THEM.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Greet your wardrobe with this stylish panjabi! This men&#39;s digital-printed blended cotton item features decorative buttons for an</p>\r\n\r\n<p>eye-catching look, ensuring you&#39;ll make an elegant impression wherever you go.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>JS-PANB-TM23-10P-48039<br />\r\nBLENDED<br />\r\nMENS BASIC PANJAB</strong>I</p>', 'https://www.youtube.com/watch?v=wuGCV_zc1G0', 1, 1, 'panjabi', '1706187390-product.jpg', '1706186962-product.jpg', '2023-10-19 23:47:35', '2024-02-25 13:15:31'),
+(1, 'Elah Panjabi', 'elah-panjabi', 1, 18, 1, 1300, 1100, 7, 'pp11', '<p>Greet your wardrobe with this stylish panjabi! This men&#39;s digital-printed blended cotton item features decorative.</p>', '<p><strong>TWELVE CLOTHING </strong>PUTS A GREAT EFFORT INTO MAKING CLOTHES THAT FIT AND PLEASE EVERY INDIVIDUAL CUSTOMER. WE ONLY MAKE PRODUCTS THAT WE CONSIDER ATTRACTIVE, HIGH QUALITY, CONTEMPORARY, GENUINE AND AFFORDABLE. WE WANT PEOPLE TO LOVE THEIR CLOTHES AND BE CONFIDENT WHILE WEARING THEM.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Greet your wardrobe with this stylish panjabi! This men&#39;s digital-printed blended cotton item features decorative buttons for an</p>\r\n\r\n<p>eye-catching look, ensuring you&#39;ll make an elegant impression wherever you go.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>JS-PANB-TM23-10P-48039<br />\r\nBLENDED<br />\r\nMENS BASIC PANJAB</strong>I</p>', 'https://www.youtube.com/watch?v=wuGCV_zc1G0', 1, 1, 'panjabi', '1706187390-product.jpg', '1706186962-product.jpg', '2023-10-19 23:47:35', '2024-05-06 00:19:29'),
 (4, 'Full-hand Shirt', 'full-hand-shirt', 1, 18, 2, 1090, 520, 0, NULL, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>', NULL, 'https://youtu.be/uaQ-swEU1cs?si=7oRZIQFdPoH6ulDt', 0, 1, NULL, '1706367436-product.jpeg', NULL, '2023-10-25 08:33:59', '2024-02-10 08:03:10'),
 (10, 'Rs Shirt', 'rs-shirt', NULL, NULL, NULL, 500, NULL, 2, NULL, NULL, NULL, 'https://youtu.be/t83z46Zr5G4', 0, 1, NULL, NULL, NULL, '2023-10-27 02:29:37', '2024-01-12 08:51:15'),
 (22, 'Baby Shoes', 'baby-shoes', NULL, 26, 4, 1500, 1200, 0, 'fsdfd', NULL, NULL, NULL, 0, 1, 'babyshoes, shoes', '1706123459-product.jpeg', NULL, '2024-01-03 01:46:22', '2024-01-24 13:10:59'),
@@ -537,8 +537,8 @@ INSERT INTO `products` (`id`, `title`, `slug`, `brand_id`, `category_id`, `subCa
 (70, 'IELGY men\'s Shoes', 'ielgy-mens-shoes', NULL, NULL, NULL, 2300, 2000, 5, NULL, NULL, NULL, NULL, 0, 1, 'shoes, IELGY', '1706123021-product.jpg', '1706123137-product.jpeg', '2024-01-24 12:21:06', '2024-02-17 02:33:31'),
 (103, 'Vasimple Shirt', 'vasimple-shirt', NULL, NULL, NULL, 1800, NULL, 9, NULL, NULL, NULL, NULL, 1, 1, 'shirt', '1706214109-product.jpg', NULL, '2024-01-25 14:21:49', '2024-02-26 09:34:17'),
 (105, 'Follow T-shirt', 'follow-t-shirt', NULL, 18, 3, 500, 450, 69, NULL, NULL, NULL, NULL, 0, 1, 't-shirt', '1706259067-product.jpg', NULL, '2024-01-26 02:48:55', '2024-04-02 14:16:50'),
-(112, 'Elah t-shirt', 'elah-t-shirt', 1, 18, 3, 350, NULL, 98, NULL, NULL, NULL, NULL, 1, 1, NULL, '1706261270-product.jpg', '1706261270-product.png', '2024-01-26 03:27:51', '2024-04-02 14:41:04'),
-(201, 'LUXURY PANJABI', 'luxury-panjabi', NULL, 18, 1, 1500, NULL, 7, NULL, NULL, NULL, NULL, 1, 1, NULL, '1707333191-product.jpg', NULL, '2024-02-07 13:13:12', '2024-04-02 13:54:07'),
+(112, 'Elah t-shirt', 'elah-t-shirt', 1, 18, 3, 350, NULL, 97, NULL, NULL, NULL, NULL, 0, 1, NULL, '1706261270-product.jpg', '1706261270-product.png', '2024-01-26 03:27:51', '2024-05-03 10:09:58'),
+(201, 'LUXURY PANJABI', 'luxury-panjabi', NULL, 18, 1, 1500, NULL, 6, NULL, NULL, NULL, NULL, 1, 1, NULL, '1707333191-product.jpg', NULL, '2024-02-07 13:13:12', '2024-05-03 10:09:58'),
 (204, 'Ajjo Black Tshirts', 'ajjo-black-tshirts', NULL, 18, 3, 600, 590, 0, NULL, NULL, '<p>The<strong> Model is wearing</strong> a white blouse from our stylist&#39;s collection, see the image for a mock-up of what the actual blouse would look like.it has text written on it in a black cursive language which looks great on a white color.</p>', NULL, 0, 1, NULL, '1707333757-product.jpg', NULL, '2024-02-07 13:22:38', '2024-04-02 14:43:26'),
 (233, 'xxx', 'xxx', NULL, NULL, NULL, 150, NULL, 1, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, '2024-03-27 04:44:14', '2024-03-30 14:16:24');
 
@@ -619,14 +619,13 @@ CREATE TABLE `reviews` (
 --
 
 INSERT INTO `reviews` (`id`, `user_id`, `product_id`, `review`, `rating`, `created_at`, `updated_at`) VALUES
-(6, 22, 40, 'Motamoti', '3', '2024-01-20 03:23:26', '2024-01-20 03:23:26'),
-(7, 38, 69, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.', '3.5', '2024-01-28 03:23:26', '2024-01-28 03:23:26'),
-(8, 32, 69, 'Lorem ipsum dolor sit amet', '5', '2024-01-28 06:03:17', '2024-01-28 06:03:17'),
-(9, 22, 22, 'Very good.', '5', '2024-01-29 13:24:12', '2024-01-29 13:24:12'),
-(10, 22, 70, 'LIke it', '4.5', '2024-02-02 08:42:20', '2024-02-02 08:42:20'),
-(12, 22, 204, 'Check out all the tools and benefits that can help you scale your success', '4.5', '2024-03-31 08:45:42', '2024-03-31 08:45:42'),
-(13, 38, 1, 'আল্লাহুম্মা সল্লি\'ওয়া সল্লিম আ\'লা নাবিয়্যিনা মুহাম্মাদ\' ﷺ.!🖤✨', '5', '2024-03-31 09:09:48', '2024-03-31 09:09:48'),
-(14, 22, 1, 'good', '4', '2024-03-31 09:20:17', '2024-03-31 09:20:17');
+(53, 22, 204, 'rahin', '4', '2024-04-22 10:49:11', '2024-04-22 10:49:11'),
+(62, 38, 70, 'orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusm', '5', '2024-04-22 11:42:54', '2024-04-22 11:42:54'),
+(76, 22, 70, 'ff', '4.5', '2024-04-22 12:01:04', '2024-04-22 12:01:04'),
+(80, 42, 70, 'We can ensure that the form submission event is properly handled by directly binding it', '2.5', '2024-04-22 12:03:11', '2024-04-22 12:03:11'),
+(81, 22, 54, 'Favorite One💕', '5', '2024-04-22 12:04:12', '2024-04-22 12:04:12'),
+(83, 22, 32, 'dolor sit N', '1.5', '2024-04-22 12:05:11', '2024-04-22 12:05:11'),
+(85, 22, 112, 'KIre', '3', '2024-04-22 22:25:52', '2024-04-22 22:25:52');
 
 -- --------------------------------------------------------
 
@@ -675,11 +674,11 @@ CREATE TABLE `shippings` (
 --
 
 INSERT INTO `shippings` (`id`, `base_id`, `base_charge`, `provider_name`, `provider_charge`, `status`, `created_at`, `updated_at`) VALUES
-(22, 12, 90, NULL, NULL, 1, '2024-01-19 04:02:25', '2024-02-10 10:04:27'),
-(23, 11, 60, NULL, NULL, 1, '2024-01-19 04:07:24', '2024-01-19 04:07:24'),
-(26, NULL, NULL, 'Shundorbon', 100, 1, '2024-01-19 04:09:01', '2024-01-19 04:09:10'),
-(28, NULL, NULL, 'Pathao', 120, 0, '2024-01-19 07:40:01', '2024-02-10 12:40:25'),
-(30, 9, 50, NULL, NULL, 2, '2024-01-30 05:57:21', '2024-01-30 05:57:21');
+(22, 12, 90, NULL, NULL, 1, '2024-01-19 04:02:25', '2024-04-30 04:02:37'),
+(23, 11, 60, NULL, NULL, 1, '2024-01-19 04:07:24', '2024-04-30 04:08:58'),
+(26, NULL, NULL, 'Shundorbon', 100, 1, '2024-01-19 04:09:01', '2024-05-03 10:16:22'),
+(28, NULL, NULL, 'Pathao', 120, 1, '2024-01-19 07:40:01', '2024-04-30 04:11:22'),
+(34, 9, 50, NULL, NULL, 2, '2024-04-30 03:23:00', '2024-05-03 10:16:06');
 
 -- --------------------------------------------------------
 
@@ -797,12 +796,13 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone`, `address_line1`, `address_line2`, `division_id`, `district_id`, `country_id`, `zipCode`, `status`, `role`, `image`, `remember_token`, `created_at`, `updated_at`) VALUES
 (21, 'Md Tawfiq', 'tawfikullah12@gmail.com', NULL, '$2y$10$6jjGBaZmqy1Mv/1bmDQeJ.HI8F.B4aEhymZeduoAtlGYEokq6KopC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, NULL, '2023-12-25 07:33:30', '2024-01-03 11:43:16'),
-(22, 'Rahin Ahmed', 'ahmedrahin660@gmail.com', '2023-12-27 07:18:45', '$2y$10$fLNxY4x2xUPES2ybadDNpO35tdNvKGjuHc7zkLn00SwH4UgqawN7a', '01887497149', 'Rampur, Sayed Bari', 'Feni', 9, 11, 1, '4567', 1, 1, '1711830700-user.jpg', 'VdbUP6wYK2CQQEvTUdC9V9o8uCswy7kADH17QExQC8Hx45ZRsfg9xNbWZbRz', '2023-12-27 07:15:20', '2024-03-30 14:31:40'),
+(22, 'Rahin Ahmed', 'ahmedrahin660@gmail.com', '2023-12-27 07:18:45', '$2y$10$tNSAYxvyfNK7/w.qFRu/iuaFXBKsu4b73qIPtaZ/mmvyb2u9wwnIi', '01887497149', 'Rampur, Sayed Bari', 'Feni', 12, 33, 1, '2345', 1, 1, NULL, 'nAqa3g1bE8lizqMfb3pESiIxv31pIQJQGAkqa5UB6NfqetU0kKGIgYnq8zHp', '2023-12-27 07:15:20', '2024-05-05 11:55:39'),
 (23, 'Saiful', 'saiful@gmail.com', '2023-12-27 07:18:45', '$2y$10$eJTjr8kFgZ1RBRLcrpVfcuyWYL0PvSsfPR2md.1BmZyD8BPjwTIo.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2, '1705135325-user.png', NULL, '2023-12-27 10:53:18', '2024-01-13 02:42:06'),
 (32, 'Mehjabin Hoissan', 'mehjabin@gmail.com', '2024-01-12 02:33:23', '$2y$10$YLh9T.UDgmN1Pej6.x14nueQGqeh0NbRMri6vlfes4IE.NAuVs/fO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, '1705134594-user.png', NULL, '2024-01-13 02:28:22', '2024-01-15 04:12:10'),
 (37, 'Sayed Ibnul', 'ibnul@gmail.com', NULL, '$2y$10$SKq0MpXMTOTsVE4MMd1sn.av/sUZXSRYqXOXs7hPggYzCAbqknNvO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, NULL, '2024-01-24 05:00:09', '2024-01-24 05:00:09'),
 (38, 'Abdullah Rahin', 'abdullahrahin25@gmail.com', '2024-01-24 05:08:06', '$2y$10$YjnErqejXeqsILivNuFXluLxwLJ2fRcfGrdWFVfKyqnwRGLcPVAI2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, '1706100749-user.jpg', NULL, '2024-01-24 05:03:51', '2024-04-02 14:14:40'),
-(39, 'Labonne', 'mehjabinhossain443@gmail.com', NULL, '$2y$10$yvGaYRT.uLM5P.rzXlwnXeS/SbhyOn9kQ8zPrr1xPJo2M.qDzFGk.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, NULL, '2024-02-15 12:46:46', '2024-02-15 12:46:46');
+(39, 'Labonne', 'mehjabinhossain443@gmail.com', NULL, '$2y$10$yvGaYRT.uLM5P.rzXlwnXeS/SbhyOn9kQ8zPrr1xPJo2M.qDzFGk.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, NULL, '2024-02-15 12:46:46', '2024-02-15 12:46:46'),
+(42, 'Sayed Ibnul', 'saibnul@gmail.com', NULL, '$2y$10$1M6taof9kyXVdDBOekhgZ.MSJ44StCTLMwDJOVhXvbcJ9Srmd7Iq6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, NULL, '2024-04-22 11:50:06', '2024-04-22 11:50:06');
 
 -- --------------------------------------------------------
 
@@ -1060,13 +1060,13 @@ ALTER TABLE `brands`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=607;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=698;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `countries`
@@ -1126,7 +1126,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `order_variations`
@@ -1156,13 +1156,13 @@ ALTER TABLE `product_attributes`
 -- AUTO_INCREMENT for table `product_variations`
 --
 ALTER TABLE `product_variations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -1174,7 +1174,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `shippings`
 --
 ALTER TABLE `shippings`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `states`
@@ -1198,19 +1198,19 @@ ALTER TABLE `tests`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `variation_values`
 --
 ALTER TABLE `variation_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=321;
 
 --
 -- Constraints for dumped tables

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Cart;
+use PDF;
+
 
 class ReportController extends Controller
 {
@@ -72,5 +74,13 @@ class ReportController extends Controller
         $delOrder = Order::findorFail($id);
         $delOrder->delete();
         
+    }
+
+    public function generatePdf(Request $request)
+    {
+        $pdf = PDF::loadView('pdf');
+        $path = public_path('pdf/');
+        $fileName = "details.pdf";
+        $pdf->save
     }
 }

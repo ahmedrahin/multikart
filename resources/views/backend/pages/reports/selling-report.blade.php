@@ -260,6 +260,11 @@
             </div>
         </div>
     </div>   
+<form method="GET" action="{{ route('generate-pdf') }}" id="pdfForm">
+    @csrf
+    <button type="submit" class="downloadPdf">Generate PDF and Download</button>
+</form>
+
 @endsection
 
 @section('page-script')
@@ -413,7 +418,6 @@
 			                $('.loader .spinner-border-sm').css('opacity', 0);
 			                $('tbody').empty();
 
-
 			                if (response.orders.length > 0) {
 			                    // Append new orders to the existing table rows
 			                    toastr.info(response.orders.length + ' Orders Found', '', {"positionClass": "toast-top-right", "closeButton": true});
@@ -429,12 +433,13 @@
 			                                <div class="d-flex order-actions gap-2">
 			                                    <a href="/admin/order/order-details/${order.id}" target="_blank"><i class='lni lni-eye'></i></a>
 			                                    <a href="javascript:;" class="delete-order" data-order-id="${order.id}" ><i class='bx bx-trash'></i></a>
-			                                    <a href="javascript:;"><i class='bx bx-cloud-download'></i></a>
+			                                     <button class="" data-order-id="${order.id}"><i class='bx bx-cloud-download'></i></button>
 			                                </div>
 			                            </td>
 			                        </tr>`;
 			                        $('tbody').append(row);
 			                    });
+			                    downPdf();
 			                } else {
 			                    toastr.warning('0 Orders Found', '', {"positionClass": "toast-top-right", "closeButton": true});
 			                    $('tbody').html(`
@@ -465,11 +470,41 @@
 			}
 
 
+			// download pdg
+			function downPdf(){
+				$('.downloadPdf').click(function(e) {
+					e.preventDefault();
+				    // var orderId = $(this).data('order-id');
+				    let data = "";
+				    $.ajax({
+				        url: '/admin/reports/generate-pdf',
+				        method: 'GET',
+				        data: data,
+				        xhrFields: {
+				        	responseType: 'blob'
+				        },
+				        headers: {
+				            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				        },
+				        success: function(response) {
+				        	var blob = new Blob([response]);
+				        	vat link = document.createElement('a');
+				        	link.href = window.URL.createObjectURL(blob);
+				        	link.download = "Details.pdf";
+				        	link.click();
+							toastr.success('The Order Details Download Successfully', '', {"positionClass": "toast-top-right", "closeButton": true});
+				        },
+				        error: function(xhr, status, error) {
+				           toastr.error('Something is wrong! Please try again.', '', {"positionClass": "toast-top-right", "closeButton": true});
+				        }
+				    });
+				});
+			}
+
 
 			filterbyDate();
 			delOrder();
-
-			console.log($('tbody').html())
+			downPdf();
     		 
     	})
     </script>

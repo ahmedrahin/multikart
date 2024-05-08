@@ -325,6 +325,7 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function () {
             Route::get('/selling-reports', 'show')->name('selling-reports');
             Route::post('/filter-by-date', 'filterByDate')->name('filter-by-date');
             Route::delete('/delete-order/{id}', 'deleteOrder')->name('delete-order');
+            Route::get('/generate-pdf', 'generatePdf')->name('generate-pdf');
         });
     });
 

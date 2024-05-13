@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\Cart;
 use PDF;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 class ReportController extends Controller
@@ -78,9 +80,30 @@ class ReportController extends Controller
 
     public function generatePdf(Request $request)
     {
-        $pdf = PDF::loadView('pdf');
-        $path = public_path('pdf/');
-        $fileName = "details.pdf";
-        $pdf->save
+        try {
+            // Load the HTML content for the PDF
+            $htmlContent = '<h1>Hello, World!</h1>'; // Replace with your actual HTML content
+            
+            // Create Dompdf instance
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $dompdf = new Dompdf($options);
+    
+            // Load HTML content into Dompdf
+            $dompdf->loadHtml($htmlContent);
+    
+            // (Optional) Set paper size and orientation
+            $dompdf->setPaper('A4', 'portrait');
+    
+            // Render the PDF
+            $dompdf->render();
+    
+            // Output the PDF
+            return $dompdf->stream('Details.pdf');
+        } catch (\Exception $e) {
+            // Log any errors that occur during PDF generation
+            \Log::error('Error generating PDF: '.$e->getMessage());
+            return response()->json(['error' => 'Error generating PDF. Please try again.'], 500);
+        }
     }
 }

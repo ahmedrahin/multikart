@@ -118,6 +118,19 @@
 		.order-actions {
 			justify-content: center;
 		}
+		.downloadPdf {
+			font-size: 18px;
+			width: 34px;
+			height: 34px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #f1f1f1;
+			border: 1px solid #eeecec;
+			text-align: center;
+			border-radius: 20%;
+			color: #2b2a2a;
+		}
     </style>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -260,10 +273,6 @@
             </div>
         </div>
     </div>   
-<form method="GET" action="{{ route('generate-pdf') }}" id="pdfForm">
-    @csrf
-    <button type="submit" class="downloadPdf">Generate PDF and Download</button>
-</form>
 
 @endsection
 
@@ -433,7 +442,7 @@
 			                                <div class="d-flex order-actions gap-2">
 			                                    <a href="/admin/order/order-details/${order.id}" target="_blank"><i class='lni lni-eye'></i></a>
 			                                    <a href="javascript:;" class="delete-order" data-order-id="${order.id}" ><i class='bx bx-trash'></i></a>
-			                                     <button class="" data-order-id="${order.id}"><i class='bx bx-cloud-download'></i></button>
+			                                     <button class="downloadPdf" data-order-id="${order.id}"><i class='bx bx-cloud-download'></i></button>
 			                                </div>
 			                            </td>
 			                        </tr>`;
@@ -469,36 +478,32 @@
 			    });
 			}
 
-
 			// download pdg
 			function downPdf(){
 				$('.downloadPdf').click(function(e) {
 					e.preventDefault();
-				    // var orderId = $(this).data('order-id');
-				    let data = "";
-				    $.ajax({
-				        url: '/admin/reports/generate-pdf',
-				        method: 'GET',
-				        data: data,
-				        xhrFields: {
-				        	responseType: 'blob'
-				        },
-				        headers: {
-				            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				        },
-				        success: function(response) {
-				        	var blob = new Blob([response]);
-				        	vat link = document.createElement('a');
-				        	link.href = window.URL.createObjectURL(blob);
-				        	link.download = "Details.pdf";
-				        	link.click();
-							toastr.success('The Order Details Download Successfully', '', {"positionClass": "toast-top-right", "closeButton": true});
-				        },
-				        error: function(xhr, status, error) {
-				           toastr.error('Something is wrong! Please try again.', '', {"positionClass": "toast-top-right", "closeButton": true});
-				        }
-				    });
+
+					$.ajax({
+						url: '/admin/reports/generate-pdf',
+						method: 'GET',
+						responseType: 'blob', // Use responseType instead of xhrFields
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						},
+						success: function(response) {
+							var blob = new Blob([response]);
+							var link = document.createElement('a');
+							link.href = window.URL.createObjectURL(blob);
+							link.download = "Details.pdf";
+							link.click();
+							toastr.success('The Order Details Downloaded Successfully', '', {"positionClass": "toast-top-right", "closeButton": true});
+						},
+							error: function(xhr, status, error) {
+							toastr.error('Something is wrong! Please try again.', '', {"positionClass": "toast-top-right", "closeButton": true});
+						}
+					});
 				});
+
 			}
 
 

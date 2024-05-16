@@ -324,11 +324,11 @@ Route::group(['middleware' => ['isAdmin'], 'prefix' => '/admin'], function () {
         Route::group(['prefix' => 'reports'], function () {
             Route::get('/selling-reports', 'show')->name('selling-reports');
             Route::post('/filter-by-date', 'filterByDate')->name('filter-by-date');
+            Route::post('/filter-by-product', 'filterByProduct')->name('filter-by-product');
             Route::delete('/delete-order/{id}', 'deleteOrder')->name('delete-order');
             Route::get('/generate-pdf', 'generatePdf')->name('generate-pdf');
         });
     });
-
 
     // wishlist
     Route::get('/wishlist-list', [WishlistController::class, 'wishlistList'])->name('wishlistList');

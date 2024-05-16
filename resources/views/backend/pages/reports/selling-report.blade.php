@@ -26,6 +26,9 @@
 		.text-primary {
 		    color: #9ea4aa !important;
 		}
+		h6 .text-danger {
+			display: inline !important;
+		}
 		button:focus {
 			box-shadow: none !important;
 		}
@@ -131,6 +134,10 @@
 			border-radius: 20%;
 			color: #2b2a2a;
 		}
+		h6 {
+			font-size: 13px;
+    		font-weight: 600;
+		}
     </style>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -201,33 +208,36 @@
 								<hr/>
 								<div class="card">
 									<div class="card-body">
-										<div class="row">
-											<div class="col-md-6">
-												<div class="mb-3">
-													<label class="form-label">First Date (optional) </label>
-													<input class="result form-control" type="text" id="firstDate1" placeholder="Select the first date">
+										<form action="{{route('filter-by-product')}}" method="post">
+											@csrf
+											<div class="row">
+												<div class="col-md-6">
+													<div class="mb-3">
+														<label class="form-label">First Date (optional) </label>
+														<input class="result form-control" type="text" id="firstDate1" placeholder="Select the first date">
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="mb-3">
+														<label class="form-label">Last Date (optional) </label>
+														<input class="result form-control time" type="text" id="lastDate2" placeholder="Select the last date">
+													</div>
 												</div>
 											</div>
-											<div class="col-md-6">
-												<div class="mb-3">
-													<label class="form-label">Last Date (optional) </label>
-													<input class="result form-control time" type="text" id="lastDate2" placeholder="Select the last date">
-												</div>
-											</div>
-										</div>
 										
-										<div class="mb-3">
-											<label class="form-label">Select an product</label>
-											<select id="product">
-												<option selected disabled>Select an product</option>
-												@foreach( $allProduct as $product )
-													<option value="{{$product->id}}">{{$product->title}}</option>
-												@endforeach
-											</select>
-										</div>
-										<div class="">
-											<button class="btn btn-primary">Search</button>
-										</div>
+											<div class="mb-3">
+												<label class="form-label">Select an product</label>
+												<select id="product" name="product">
+													<option selected disabled>Select an product</option>
+													@foreach( $allProduct as $product )
+														<option value="{{$product->id}}">{{$product->title}}</option>
+													@endforeach
+												</select>
+											</div>
+											<div class="">
+												<button class="btn btn-primary" type="submit">Search</button>
+											</div>
+										</form>
 									</div>
 								</div>
 	                    	</div>
@@ -245,7 +255,9 @@
                     <div>
                         <h5 class="mb-0">Orders Summary</h5>
                     </div>
-                    <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                    <div class="ms-auto" style="display: none;">
+						<h6 class="totalOrder">Total Order: <span class="text-danger"></span></h6>
+						<h6 class="totalAmn">Total Amount: <span class="text-danger"></span></h6>
                     </div>
                 </div>
                 <hr/>
@@ -273,6 +285,12 @@
             </div>
         </div>
     </div>   
+
+	{{-- <form id="pdfForm" action="/admin/reports/generate-pdf" method="POST">
+		<!-- Add any form fields or data needed for PDF generation -->
+		<button id="downloadPdf" type="submit">Download PDF</button>
+	</form> --}}
+	
 
 @endsection
 
@@ -449,8 +467,12 @@
 			                        $('tbody').append(row);
 			                    });
 			                    downPdf();
+								$('.ms-auto').css('display', 'block');
+								$('.totalOrder span').html(response.orders.length);
+								$('.totalAmn span').html(response.totel_amn + "৳");
 			                } else {
 			                    toastr.warning('0 Orders Found', '', {"positionClass": "toast-top-right", "closeButton": true});
+								$('.ms-auto').css('display', 'none');
 			                    $('tbody').html(`
 			                        <tr>
 			                            <td colspan="7">
@@ -483,27 +505,28 @@
 				$('.downloadPdf').click(function(e) {
 					e.preventDefault();
 
+					// Send Ajax request to generate PDF
 					$.ajax({
 						url: '/admin/reports/generate-pdf',
 						method: 'GET',
-						responseType: 'blob', // Use responseType instead of xhrFields
-						headers: {
-							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-						},
 						success: function(response) {
+							// Convert response to Blob
 							var blob = new Blob([response]);
+
+							// Create download link
 							var link = document.createElement('a');
 							link.href = window.URL.createObjectURL(blob);
 							link.download = "Details.pdf";
 							link.click();
-							toastr.success('The Order Details Downloaded Successfully', '', {"positionClass": "toast-top-right", "closeButton": true});
+
+							// Display success message (you may use toastr here)
+							toastr.success('The Order Details Pdf Downloaded', '', {"positionClass": "toast-top-right", "closeButton": true});
 						},
-							error: function(xhr, status, error) {
+						error: function(xhr, status, error) {
 							toastr.error('Something is wrong! Please try again.', '', {"positionClass": "toast-top-right", "closeButton": true});
 						}
 					});
 				});
-
 			}
 
 

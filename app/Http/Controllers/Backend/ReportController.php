@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Cart;
-use PDF;
+use Dompdf\Exception as DompdfException;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -38,7 +38,7 @@ class ReportController extends Controller
         $order_lastDate  = date("M-d-y", strtotime($lastDate));
 
         $orders = Order::whereBetween('order_date', [$order_firstDate, $order_lastDate])->where('status', 'Completed')->get();
-        $totel_amn = $orders->sum('paid_amount');
+        $totel_amn = $orders->sum('amount');
 
         // get product qty
         if( $orders->count() > 0 ){
@@ -62,13 +62,14 @@ class ReportController extends Controller
         ]);
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        
+    // filter by product
+    public function filterByProduct(Request $request){
+        $productId = $request->product;
+        $orders = Cart::where('order_id', '!=', null)->where('product_id', $productId)->get();
+        foreach ($orders as $order) {
+            
+     
+        }
     }
 
     // delete order
@@ -81,28 +82,28 @@ class ReportController extends Controller
     public function generatePdf(Request $request)
     {
         try {
-            // Load the HTML content for the PDF
+            // Load the HTML content for the PDF (you may need to pass dynamic content here)
             $htmlContent = '<h1>Hello, World!</h1>'; // Replace with your actual HTML content
-            
+
             // Create Dompdf instance
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);
             $dompdf = new Dompdf($options);
-    
+
             // Load HTML content into Dompdf
             $dompdf->loadHtml($htmlContent);
-    
+
             // (Optional) Set paper size and orientation
             $dompdf->setPaper('A4', 'portrait');
-    
+
             // Render the PDF
             $dompdf->render();
-    
+
             // Output the PDF
             return $dompdf->stream('Details.pdf');
-        } catch (\Exception $e) {
+        } catch (DompdfException $e) {
             // Log any errors that occur during PDF generation
-            \Log::error('Error generating PDF: '.$e->getMessage());
+            \Log::error('Dompdf error: '.$e->getMessage());
             return response()->json(['error' => 'Error generating PDF. Please try again.'], 500);
         }
     }
